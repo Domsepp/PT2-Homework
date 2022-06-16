@@ -31,7 +31,7 @@ class Raster {
         bitmap_image image(filename);
 
         if (!image) {
-            std::cerr << "Could not open bitmap!" << std::endl;
+            std::cerr << "Could NOT open bitmap!" << std::endl;
             return;
         }
 
