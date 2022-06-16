@@ -1,0 +1,12 @@
+4008 --1.2 stof 
+8520 09160429 Year should be between 1893 and 2018     
+8520 O stof 
+17222 29400225 Year should be between 1893 and 2018     
+18491 17430817 Year should be between 1893 and 2018     
+20428 94812051 Year should be between 1893 and 2018     
+20428 - stof 
+29456 p stof 
+29456 -1.7976931348623157e+508 stof 
+37030 20200520 Year should be between 1893 and 2018     
+37499 err stof 
+37499 ll.7 stof 

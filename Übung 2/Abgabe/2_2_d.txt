@@ -1,0 +1,8 @@
+Man nehme einen Zustand.
+Für jeden Zustandsübergang, der von diesem Zustand ausgeht, gibt es einen oder mehrere values, die diesen auslöst.
+Also erzeugt man ein switch-case-Codesnippet, welches alle values, die Zustandsübergänge auslösen, als cases hat.
+In jedem case wird der state auf den Zustand gesetzt, zu dem der Zustandsübergang führt.
+Danach kommt ein break;, da danach nichts mehr geschehen soll.
+
+Um alle für den jeweiligen Zustand ungültigen Eingaben herauszufiltern, muss am Ende noch ein default-case kommen, 
+der den Fehler ausgibt und danach auch ein break; hat.

@@ -1,0 +1,46 @@
+Aufgabe a 
+
+Das Loop-Programm muss hier immer nach endlicher Zeit terminieren, da x_i keinen unendlichen Wert annehmen kann. Daher können nur
+endliche Anzahlen an Aufrufen angegeben werden.
+
+Aufgabe b
+
+Ein While-Programm muss nicht immer nach endlicher Zeit terminieren, da ich eine Abbruchbedingung festlegen kann, die nie erreicht wird.
+
+Aufgabe c
+
+Das ist möglich. Hierbei wird für x_i die gewünschte Anzahl an Wiederholungen angegeben. Bei jedem Durchlauf muss diese nun um 1 
+erniedrigt werden. Dazu kann bei gegebenem Befehlssatz x_j auf den Wert von x_i gesetzt werden und c auf 1. Dann wird bei jedem
+Durchgang x_i := x_j - c ausgeführt.
+
+Aufgabe d
+
+Das ist nicht möglich, da bei der Ausführung des Loop-Programmes nur endliche Ausführungen möglich sind. Diese Limitierung existiert bei 
+einem While-Program nicht.
+
+Aufgabe e
+
+i)
+
+P_+(a,b) ::= 
+            a = a+b
+
+ii)
+
+P_2 ::=
+            P_+(c,e)
+            d = d-1
+
+P_*(c,d) ::= 
+            e = c + 0
+            WHILE d != 1 DO P_2 END
+
+iii)
+
+P_3 ::=
+            P_*(f,h)
+            g = g-1
+
+P_^(f,g) ::= 
+            h = f + 0
+            WHILE g != 1 DO P_3 END

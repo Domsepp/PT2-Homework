@@ -1,0 +1,23 @@
+a)
+<Ziffer> ::= [0-9]
+<ZifferohneNull> ::= [1-9]
+<Ziffernfolge> ::= <Ziffer> | <Ziffer> <Ziffernfolge>
+<ZiffernfolgeohneNullamAnfang> ::= <Ziffer> | <ZifferohneNull> <Ziffernfolge>
+<Vorzeichen> ::= "-"
+<Ganzzahl> ::= <Vorzeichen> <ZiffernfolgeohneNullamAnfang> | <ZiffernfolgeohneNullamAnfang>
+<Kommazahl> ::= <Ganzzahl> "," <Ziffernfolge>
+<Konstante> ::= "pi" | "e"
+<Zahl> ::= <Ganzzahl> | <Kommazahl> | <Konstante>
+<Operator> ::= "+" | "-" | "*" | "/" | "^" | "%"
+<Speichern> ::= "->M" <Ziffer>
+<Abrufen> ::= "M" <Ziffer>
+<Ausdruck> ::= <Zahl> | <Ausdruck> <Operator> <Ausdruck> | "(" <Ausdruck> ")" | "round(" <Ausdruck> ")" | <Abrufen> | <Ausdruck> <Speichern>
+
+b)
+(pi^2)/6->M1+round(4,5*M1)%pi
+
+c)
+(pi^2)/6(->M1)+round(4,5*M1)%pi
+Dieses Beispiel ist ungültig, da ->M1 kein Ausdruck ist und somit nicht umklammert werden kann. Dies ist aus der Sicht der Semantik auch sinnvoll.
+(pi^2)/6->M1+round(4,5*M1)%pie
+Dieses Beispiel ist ungültig, da zwischen zwei Ausdrücken, hier pi und e, ein Operator benötigt wird.

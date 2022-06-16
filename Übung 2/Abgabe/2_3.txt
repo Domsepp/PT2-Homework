@@ -1,0 +1,47 @@
+Es werden alle Wörter, die mit einem Großbuchstaben beginnen und mit mindestens einem Kleinbuchstaben weitergehen. Doppelte Vornamen werden akzeptiert, müssen aber mit einem Leerzeichen oder einem 
+Bindestrich voneinander getrennt sein. Alle Namen haben die gleichen Vorgaben.
+Bsp:
+    korrekt: Tom
+    fehlerhaft: tom
+
+
+Nachname:		(([a-zäöüß]){2,10}[ ]){0,5}[A-ZÄÖÜ][a-zäöüß]+([- ][A-ZÄÖÜ][a-zäöüß]+)*
+
+Der Nachname kann mit einem Kleinbuchstaben beginnen (Bsp. "von Strauß"), es müssen aber mindestens 2 Zeichen sein. zwischen den kleinen Wörtern muss ein Leerzeichen stehen. Das nachfolgende Wort hat
+die gleichen Einschränkungen, wie die Namen bei Vorname. 
+Bsp:
+    korrekt: Müller
+    fehlerhaft: Von Müller
+
+
+Straße:			([A-ZÄÖÜ][a-zäöüß]+( |[.]{0,1}-))*[A-ZÄÖÜ][a-zäöüß]+[.]{0,1}
+
+Die Straße besteht aus Wort, was mit Großbuchstaben anfängt und aus beliebig vielen Zeichen besteht. Nach dem Wort kann ein Punkt stehen. Danach können Wörter angehängt werden, die mit Leerzeichen oder
+Punkt getrennt werden.
+Bsp:
+    korrekt: Lilienstraße
+    fehlerhaft: lilienStraße
+
+
+Hausnummer:		[1-9][0-9]*[A-Za-z]{0,1}(-[1-9][0-9]*[A-Za-z]{0,1}){0,1}
+
+Die Hausnummer besteht aus einer natürlichen Zahl (ohne führende 0) und optional einem Buchstaben. Es kann eine Reichweite durch anfügen einer weiteren Zahl angegeben werden. Diese muss mit Bindestrich getrennt sein.
+Bsp:
+    korrekt: 19a
+    fehlerhaft: 19-20-30
+
+
+Postleitzahl:		[0-9]{5}
+
+Es müssen 5 Ziffern von 0 bis 9 sein.
+Bsp:
+    korrekt: 87492
+    fehlerhaft: 1928344
+
+
+Ort:			[A-ZÄÖÜ][a-zäöüß]+([- ][A-ZÄÖÜ][a-zäöüß]+){0,1}
+
+Der Ort können maximal 2 Wörter sein, die mit Leerzeichen oder Bindestrich voneinander getrennt sind.
+Bsp:
+    korrekt: Königs-Wusterhausen
+    fehlerhaft: kleiner Ort
