@@ -115,11 +115,23 @@ class GameOfLife {
 
         // TODO 4.1d: Flip some cells randomly (probability to flip for each
         // cell is inversionFactor)
+        std::mt19937 generator;
+        std::uniform_int_distribution<int> distribution(1, 10000);
+
+        int rando = 0;
+
+        for(int y = 0; y<m_raster.width();y++){
+            for(int x = 0; x<m_raster.height();y++){
+                if(distribution(generator)<10000*inversionFactor){
+                    m_raster.setValue(x,y,!(m_raster.value(x,y)));
+                }   
+            }
+        }
     }
 
     void simulateNextState(bool isTorus) {
         // TODO 4.1c: Play one iteration of Game of Life
-        Raster oldRaster(m_raster.width(), m_raster.height());
+        Raster newRaster(m_raster.width(), m_raster.height());
         int sum = 0;
         for (int width = 0; width < m_raster.width(); width++){
             for (int height = 0; height < m_raster.height(); height++){
@@ -127,25 +139,27 @@ class GameOfLife {
                 for (int i = -1; i < 2; i++){
                     for (int j = -1; j < 2; j++){
                         if (!(i==0 && j== 0)){
-                        sum += cellValue(width+i,height+j, isTorus);
+                            sum += cellValue(width+i,height+j, isTorus);
                         }
                     }
                 }
-                if ((m_raster.value(width, height) == 0 && sum == 3)||(m_raster.value(width, height)==1 && (sum >= 2 && sum <= 3)))
+                if ((m_raster.value(width, height) == 0 && sum == 3)||(m_raster.value(width, height)==1 && (sum >= 2 && sum <= 3))){
                     newRaster.setValue(width, height, 1);
+
                 }else{
                     newRaster.setValue(width, height, 0);
                 }
             }
         }
+        m_raster = newRaster;
         
     }
 
     void save(const std::string& filename) { m_raster.save(filename); }
 
    private:
-    Raster m_raster;
-    std::mt19937 m_gen;
+        Raster m_raster;
+        std::mt19937 m_gen;
 };
 
 // This struct parses all necessary command line parameters. It is already
