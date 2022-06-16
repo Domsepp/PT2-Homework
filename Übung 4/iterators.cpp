@@ -8,7 +8,7 @@ template <class T>
 void printContainer(T& container)
 {
 	std::cout << "{ ";
-	for (const auto& element : container)
+	for(const auto& element : container)
 	{
 		std::cout << element << " ";
 	}
@@ -21,6 +21,28 @@ T front_back_pairing(const T& inContainer)
 {
 	T outContainer{};
 
+	outContainer = inContainer;
+	auto in_ptr_front = inContainer.begin();
+	auto in_ptr_back = inContainer.end();
+	auto out_ptr = outContainer.begin();
+	in_ptr_back--;
+	
+
+	while(out_ptr != outContainer.end()){
+
+		*out_ptr=*in_ptr_front;
+		std::cout << *out_ptr << ",";
+		out_ptr++;
+		if(out_ptr != outContainer.end()){
+			*out_ptr=*in_ptr_back;
+			std::cout << *out_ptr << ",";
+			out_ptr++;
+		}
+
+		in_ptr_front++;
+		in_ptr_back--;
+
+	}
 	return outContainer;
 }
 
@@ -89,9 +111,9 @@ int main()
 {
 	testFrontBackPairingFunctionality();
 	std::cout << std::endl;
-	testRemoveDuplicateFunctionality();
+	/*testRemoveDuplicateFunctionality();
 	std::cout << std::endl;
-	testAddDifferenceFunctionality();
+	testAddDifferenceFunctionality();*/
 
 	return 0;
 }
