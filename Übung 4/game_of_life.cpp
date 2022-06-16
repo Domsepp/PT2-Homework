@@ -100,8 +100,11 @@ class GameOfLife {
         // matching cell of opposite side
         if (isTorus){
             return m_raster.value(x%m_raster.width(),y%m_raster.height());
+        }else{
+            if (x>=0 && x<m_raster.width()&&y>=0&&y<m_raster.height()){
+                return m_raster.value(x,y);
+            }
         }
-        
         return 0;
     }
 
@@ -116,15 +119,24 @@ class GameOfLife {
 
     void simulateNextState(bool isTorus) {
         // TODO 4.1c: Play one iteration of Game of Life
-        if (isTorus)
-        {
-            //doSomething();
-        }else{
-            for (int i = 0; i < count; i++)
-            {
-                /* code */
+        Raster oldRaster(m_raster.width(), m_raster.height());
+        int sum = 0;
+        for (int width = 0; width < m_raster.width(); width++){
+            for (int height = 0; height < m_raster.height(); height++){
+                sum = 0;
+                for (int i = -1; i < 2; i++){
+                    for (int j = -1; j < 2; j++){
+                        if (!(i==0 && j== 0)){
+                        sum += cellValue(width+i,height+j, isTorus);
+                        }
+                    }
+                }
+                if ((m_raster.value(width, height) == 0 && sum == 3)||(m_raster.value(width, height)==1 && (sum >= 2 && sum <= 3)))
+                    newRaster.setValue(width, height, 1);
+                }else{
+                    newRaster.setValue(width, height, 0);
+                }
             }
-            
         }
         
     }
