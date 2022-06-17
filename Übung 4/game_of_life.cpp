@@ -193,6 +193,7 @@ int main(int argc, char* argv[]) {
                 parameter.seedProbability = std::stof(argv[i + 1]);
             } else if (strcmp(argv[i], "-p") == 0) {
                 parameter.patternFilename = argv[i + 1];
+                std::cout << parameter.patternFilename << std::endl;
             } else if (strcmp(argv[i], "-o") == 0) {
                 parameter.outputDirectory = argv[i + 1];
             } else if (strcmp(argv[i], "-iv") == 0) {

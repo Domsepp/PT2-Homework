@@ -31,11 +31,9 @@ T front_back_pairing(const T& inContainer)
 	while(out_ptr != outContainer.end()){
 
 		*out_ptr=*in_ptr_front;
-		std::cout << *out_ptr << ",";
 		out_ptr++;
 		if(out_ptr != outContainer.end()){
 			*out_ptr=*in_ptr_back;
-			std::cout << *out_ptr << ",";
 			out_ptr++;
 		}
 
@@ -51,8 +49,27 @@ template <class T, class DataType = typename T::value_type>
 void remove_duplicates(T& container)
 {
 	// Use DataType as data type for the chosen temporary data container
-}
+	T outContainer = container;
+	auto ptr1 = outContainer.begin();
+	auto end = --outContainer.end();
+	auto ptr2 = end;
+	while (ptr1 != --outContainer.end()){
+		ptr2 = end;
+		while (ptr2 != ptr1){
+			if(*ptr1 == *ptr2){
+				outContainer.erase(ptr2);
+				end = --outContainer.end();
+				ptr2 = end;
+			}
+			--ptr2;
+			//std::cout << *(outContainer.begin()) << ", " <<*(--outContainer.end()) << std::endl;
+			//printContainer(outContainer);
+		}
+		ptr1++;
+	}
+	container = outContainer;
 
+}
 // TODO 4.2c - Expand the given container by inserting the numerical
 //             differences of each element to its neighbors.
 template <class T>
@@ -109,11 +126,11 @@ void testAddDifferenceFunctionality()
 
 int main()
 {
-	testFrontBackPairingFunctionality();
+	/*testFrontBackPairingFunctionality();
+	std::cout << std::endl;*/
+	testRemoveDuplicateFunctionality();
 	std::cout << std::endl;
-	/*testRemoveDuplicateFunctionality();
-	std::cout << std::endl;
-	testAddDifferenceFunctionality();*/
+	/*testAddDifferenceFunctionality();*/
 
 	return 0;
 }
