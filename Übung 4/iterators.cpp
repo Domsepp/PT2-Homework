@@ -74,7 +74,25 @@ void remove_duplicates(T& container)
 //             differences of each element to its neighbors.
 template <class T>
 void insert_differences(T& container)
-{}
+{
+	T outContainer;
+	outContainer.insert(outContainer.end(), (*(--container.end())-*container.begin()));
+	outContainer.insert(outContainer.end(), *container.begin());
+	outContainer.insert(outContainer.end(), (*(++container.begin())-*container.begin()));
+	auto ptr = container.begin();
+	while (ptr != container.end()){
+		if(ptr != container.begin() && ptr != --container.end()){
+			outContainer.insert(outContainer.end(), (*(--ptr)-*(++ptr)));
+			outContainer.insert(outContainer.end(), *ptr);
+			outContainer.insert(outContainer.end(), (*(++ptr)-*(--ptr)));
+		}
+		ptr++;
+	}
+	outContainer.insert(outContainer.end(), (*(----container.end())-*(--container.end())));
+	outContainer.insert(outContainer.end(), *(--container.end()));
+	outContainer.insert(outContainer.end(), (*(container.begin())-*(--container.end())));
+	container = outContainer;
+}
 
 void testFrontBackPairingFunctionality()
 {
@@ -126,11 +144,10 @@ void testAddDifferenceFunctionality()
 
 int main()
 {
-	/*testFrontBackPairingFunctionality();
-	std::cout << std::endl;*/
+	testFrontBackPairingFunctionality();
+	std::cout << std::endl;
 	testRemoveDuplicateFunctionality();
 	std::cout << std::endl;
-	/*testAddDifferenceFunctionality();*/
-
+	testAddDifferenceFunctionality();
 	return 0;
 }
