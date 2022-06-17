@@ -71,14 +71,18 @@ RoutesData importRoutesData(const std::string& path){
 // number of lookups.
 int linearSearch(int destID, const std::vector<Route>& routes, long long& numLookups){
 	int numRoutes = 0;
+	bool exists = false;
 	for (auto & single_route : routes){
 		numLookups++;
 		if (single_route.destinationId == destID){
+			exists = true;
 			numRoutes++;
 		}
 	}
-
-	return numRoutes;
+	if(exists = true){
+		return numRoutes;
+	}
+	return -1;
 }
 
 // TODO 4.3a - Evaluate the linearSearch function by calling it for every possible destination id.
@@ -87,26 +91,75 @@ int linearSearch(int destID, const std::vector<Route>& routes, long long& numLoo
 std::pair<long long, long long> evaluateLinearSearch(const RoutesData& routesData){
 	long long numLookups = 0;
 	long long duration = 0;
+	int numRoutes = 0;
+	int minDestID = 100000000;
+	int maxDestID = 0;
 
+
+	for(auto & single_route : routesData.routes){
+		if(single_route.destinationId < minDestID){
+			minDestID = single_route.destinationId;
+		}
+		if(single_route.destinationId > maxDestID){
+			maxDestID = single_route.destinationId;
+		}
+	}
+	std::chrono::time_point<std::chrono::system_clock> start, end;
+	start = std::chrono::system_clock::now();
+	for(int i = minDestID; i<=maxDestID;i++){
+		numRoutes = linearSearch(i, routesData.routes, numLookups);
+		if(numRoutes > -1){
+			//std::cout << "destID = " << i << ", number of Routes = " << numRoutes << std::endl;
+		}
+	}
+	end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = end - start;
+	duration = 1000*(elapsed_seconds.count());
 	return std::make_pair(numLookups, duration);
 }
 
 // TODO 4.3b - Return the number of routes for the given destination id based on a binary search. Count the
 // number of lookups. The vector should have been sorted before calling this function.
-int binarySearch(int destID, const std::vector<Route>& routes, long long& numLookups)
-{
-	return 0;
+int binarySearch(int destID, const std::vector<Route>& routes, long long& numLookups, int& currentrouteID){
+	int numRoutes = 0;
+	bool exists = false;
+	while (true){
+		numLookups++;
+		exists = false;
+		if (routes[currentrouteID].destinationId == destID){
+			exists = true;
+			numRoutes++;
+			currentrouteID++;
+		}else{
+			break;
+		}
+	}
+	if (exists){
+		return numRoutes;
+	}
+	return -1;
+	
 }
 
 // TODO 4.3b - Evaluate the binarySearch function by calling it for every possible destination id.
 // Return the number of lookups and the processing time as a pair of long longs.
 // Use std::chrono for time measurement.
 // Attention: sorting is *not* part of the evaluation and should be conducted beforehand.
-std::pair<long long, long long> evaluateBinarySearch(RoutesData& routesData)
-{
+std::pair<long long, long long> evaluateBinarySearch(RoutesData& routesData){
 	long long numLookups = 0;
 	long long duration = 0;
-
+	std::sort(routesData.routes.begin(),routesData.routes.end(),operator<);
+	int currentdestID = routesData.routes[0].destinationId;
+	int currentrouteID = 0;
+	int numRoutes = 0;
+	std::chrono::time_point<std::chrono::system_clock> start, end;
+	start = std::chrono::system_clock::now();
+	for(; currentrouteID<routesData.routes.size();currentdestID++){
+		numRoutes = binarySearch(currentdestID, routesData.routes, numLookups, currentrouteID);
+	}
+	end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = end - start;
+	duration = 1000*(elapsed_seconds.count());
 	return std::make_pair(numLookups, duration);
 }
 

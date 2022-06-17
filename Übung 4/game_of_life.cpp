@@ -43,8 +43,8 @@ class Raster {
         // TODO 4.1b: Load image by using image.get_pixel
         // A black pixel represents 1, all other values represent 0
         unsigned char red = 0, green = 0, blue = 0;
-        for (size_t i = 0; i < m_height; i++) {
-            for (size_t j = 0; j < m_width; j++) {
+        for (int i = 0; i < m_height; i++) {
+            for (int j = 0; j < m_width; j++) {
                 image.get_pixel(i, j, red, green, blue);
                 if (red=='0' && green=='0' && blue=='0') {
                     setValue(i, j, 1);
@@ -59,9 +59,12 @@ class Raster {
         // TODO 4.1b: Save image by using image.set_pixel
         // Living cells should be stored as black pixels, all other pixels are
         // white
+        std::cout << m_width << ", " << m_height<<std::endl;
         bitmap_image image(m_width, m_height);
+        
         for (int height = 0; height < m_height; height++){
             for (int width = 0; width < m_width; width++){
+                std::cout << value(height, width) << std::endl;
                 if (value(height, width)){
                     image.set_pixel(width, height, 255, 255, 255);
                 }else{
@@ -233,12 +236,12 @@ int main(int argc, char* argv[]) {
     }
 
     GameOfLife gol(std::move(raster));
-    /*for (int iteration = 0; iteration <= parameter.maxIterations; iteration++){
+    for (int iteration = 0; iteration <= parameter.maxIterations; iteration++){
         gol.save(parameter.outputDirectory + "game_of_life_" +
                  std::to_string(iteration) + ".bmp");
         gol.simulateInversion(parameter.inversionFactor);
         gol.simulateNextState(parameter.isTorus);
-    }*/
+    }
 
     return 0;
 }
