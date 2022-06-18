@@ -64,7 +64,7 @@ class Raster {
         
         for (int height = 0; height < m_height; height++){
             for (int width = 0; width < m_width; width++){
-                std::cout << value(height, width) << std::endl;
+               // std::cout << value(height, width) << std::endl;
                 if (value(height, width)){
                     image.set_pixel(width, height, 255, 255, 255);
                 }else{
@@ -102,9 +102,9 @@ class GameOfLife {
         // In case isTorus is true and (x, y) is outside of raster use value of
         // matching cell of opposite side
         if (isTorus){
-            return m_raster.value(x%m_raster.width(),y%m_raster.height());
+            return m_raster.value(x%m_raster.height(),y%m_raster.width());
         }else{
-            if (x>=0 && x<m_raster.width()&&y>=0&&y<m_raster.height()){
+            if (x>=0 && x<m_raster.height()&&y>=0&&y<m_raster.width()){
                 return m_raster.value(x,y);
             }
         }
@@ -123,10 +123,10 @@ class GameOfLife {
 
         int rando = 0;
 
-        for(int y = 0; y<m_raster.width();y++){
-            for(int x = 0; x<m_raster.height();y++){
+        for(int width = 0; width<m_raster.width();width++){
+            for(int height = 0; height<m_raster.height();height++){
                 if(distribution(generator)<10000*inversionFactor){
-                    m_raster.setValue(x,y,!(m_raster.value(x,y)));
+                    m_raster.setValue(height,width,!(m_raster.value(height,width)));
                 }   
             }
         }
@@ -142,15 +142,15 @@ class GameOfLife {
                 for (int i = -1; i < 2; i++){
                     for (int j = -1; j < 2; j++){
                         if (!(i==0 && j== 0)){
-                            sum += cellValue(width+i,height+j, isTorus);
+                            sum += cellValue(height+i,width+j, isTorus);
                         }
                     }
                 }
-                if ((m_raster.value(width, height) == 0 && sum == 3)||(m_raster.value(width, height)==1 && (sum >= 2 && sum <= 3))){
-                    newRaster.setValue(width, height, 1);
+                if ((m_raster.value(height, width) == 0 && sum == 3)||(m_raster.value(height, width)==1 && (sum >= 2 && sum <= 3))){
+                    newRaster.setValue(height, width, 1);
 
                 }else{
-                    newRaster.setValue(width, height, 0);
+                    newRaster.setValue(height, width, 0);
                 }
             }
         }
