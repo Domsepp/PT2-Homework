@@ -46,7 +46,9 @@ class Raster {
         for (int i = 0; i < m_height; i++) {
             for (int j = 0; j < m_width; j++) {
                 image.get_pixel(i, j, red, green, blue);
-                if (red=='0' && green=='0' && blue=='0') {
+                std::cout << static_cast<int>(red) << std::endl;
+
+                if (static_cast<int>(red)==0 && static_cast<int>(green)==0 && static_cast<int>(blue)==0) {
                     setValue(i, j, 1);
                 } else {
                     setValue(i, j, 0);
