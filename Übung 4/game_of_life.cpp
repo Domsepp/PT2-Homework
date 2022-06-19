@@ -239,8 +239,10 @@ int main(int argc, char* argv[]) {
 
     GameOfLife gol(std::move(raster));
     for (int iteration = 0; iteration <= parameter.maxIterations; iteration++){
+        if(iteration == parameter.maxIterations){
         gol.save(parameter.outputDirectory + "game_of_life_" +
                  std::to_string(iteration) + ".bmp");
+        }
         gol.simulateInversion(parameter.inversionFactor);
         gol.simulateNextState(parameter.isTorus);
     }
