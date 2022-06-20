@@ -45,7 +45,7 @@ class Raster {
         unsigned char red = 0, green = 0, blue = 0;
         for (int i = 0; i < m_height; i++) {
             for (int j = 0; j < m_width; j++) {
-                image.get_pixel(i, j, red, green, blue);
+                image.get_pixel(j, i, red, green, blue);
                 std::cout << static_cast<int>(red) << std::endl;
 
                 if (static_cast<int>(red)==0 && static_cast<int>(green)==0 && static_cast<int>(blue)==0) {
@@ -104,6 +104,12 @@ class GameOfLife {
         // In case isTorus is true and (x, y) is outside of raster use value of
         // matching cell of opposite side
         if (isTorus){
+            while(x<0){
+                x+=m_raster.height();
+            }
+            while(y<0){
+                y+=m_raster.width();
+            }
             return m_raster.value(x%m_raster.height(),y%m_raster.width());
         }else{
             if (x>=0 && x<m_raster.height()&&y>=0&&y<m_raster.width()){
