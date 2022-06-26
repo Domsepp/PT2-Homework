@@ -132,6 +132,19 @@ void createGraph(Graph& graph)
 			}
 		}
 	}
+	/* hier is noch nix fertig
+	int minWeight, tempindex;
+	for(int i = 0; i<graph.vertex_count; i++){
+		minWeight = std::numeric_limits<int>::max();
+		tempindex = i+1;
+		for(int j = i; j<graph.vertex_count;j++){
+			temp.connected_vertices = {i,j};
+			temp.weight = getWeight(graph,i,j);
+			if(temp.weight > 0){
+				graph.mst.push_back(temp);
+			}
+		}
+	}*/
 }
 
 // return added weights of a list of edges
