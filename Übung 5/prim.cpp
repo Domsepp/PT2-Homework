@@ -3,6 +3,7 @@
 #include <iostream>
 #include <limits>
 #include <vector>
+#include <cmath>
 
 // small test data (graph example from lecture slides)
 constexpr int N1 = 6;
@@ -114,6 +115,23 @@ void createGraph(Graph& graph)
 	// - vertices are numbered (labeled) from 0 to graph.vertex_count-1
 	// - edges exist if and only if there is positive distance between two vertices
 	// - edges are bidirectional, that is, edges are inserted only once between two vertices
+	graph.edges.clear();
+	graph.vertices.clear();
+	Edge temp;
+	Vertex temp_Vertex;
+	temp_Vertex.index = 0;
+
+	for(int i = 0; i<graph.vertex_count; i++){
+		temp_Vertex.index += 1;
+		for(int j = i; j<graph.vertex_count;j++){
+			temp.connected_vertices = {i,j};
+			temp.weight = getWeight(graph,i,j);
+			if(temp.weight > 0){
+				graph.edges.push_back(temp);
+				graph.vertices.push_back(temp_Vertex);
+			}
+		}
+	}
 }
 
 // return added weights of a list of edges
@@ -139,7 +157,7 @@ int main()
 	graph1.vertex_count = N1;
 	graph1.weights_table = weights_table_1.data();
 	createGraph(graph1);
-	prim(graph1);
+	/*prim(graph1);
 	std::cout << "Example 1: " << graph1.mst << ", total costs: " << totalWeight(graph1.mst) << std::endl;
 
 	// Example 2 (larger)
@@ -148,7 +166,7 @@ int main()
 	graph2.weights_table = weights_table_2.data();
 	createGraph(graph2);
 	prim(graph2);
-	std::cout << "Example 2: " << graph2.mst << ", total costs: " << totalWeight(graph2.mst) << std::endl;
+	std::cout << "Example 2: " << graph2.mst << ", total costs: " << totalWeight(graph2.mst) << std::endl;*/
 
 	return 0;
 }
