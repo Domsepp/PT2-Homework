@@ -138,7 +138,10 @@ void createGraph(Graph& graph)
 int totalWeight(const std::vector<Edge>& edges)
 {
 	// TODO 5.1b: total weight accumulated over a given list of edges
-
+	long sum = 0;
+	for(const auto& element: edges){
+		sum+=element.weight;
+	}
 	return 0;
 }
 
