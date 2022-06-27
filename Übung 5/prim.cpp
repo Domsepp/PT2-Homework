@@ -121,12 +121,16 @@ Edge search_best_Edge(Graph &der_Graph){
 	int min_Edge_length = std::numeric_limits<int>::max();
 	for(Edge &ed : der_Graph.edges){
 		if(!der_Graph.vertices[ed.connected_vertices[1]].processed){
+			//std::cout << ed.connected_vertices[0] << std::endl;
 			if(ed.weight<min_Edge_length){
 				min_Edge_length = ed.weight;
 				min_Edge = ed;
+				//std::cout << min_Edge_length << std::endl;
 			}
 		}
 	}
+	//std::cout << "numeric Limits: " << min_Edge_length << std::endl;
+	//std::cout << "minimum Edge: " << min_Edge.weight << std::endl;
 	return min_Edge;
 }
 
@@ -161,36 +165,26 @@ void createGraph(Graph& graph)
 	Edge min_Edge;
 	while(!isProcessed(graph.vertices)){
 		min_Edge = search_best_Edge(graph);
+		std::cout << "Hi!" << std::endl;
 		graph.mst.push_back(min_Edge);
+		std::cout << "Hi!2" << std::endl;
+		graph.vertices[min_Edge.connected_vertices[0]].processed = true;
 		graph.vertices[min_Edge.connected_vertices[1]].processed = true;
 	}
 	std::cout << graph.mst << std::endl;
 
 
-	/* hier is noch nix fertig
-	int minWeight, tempindex;
-	for(int i = 0; i<graph.vertex_count; i++){
-		minWeight = std::numeric_limits<int>::max();
-		tempindex = i+1;
-		for(int j = i; j<graph.vertex_count;j++){
-			temp.connected_vertices = {i,j};
-			temp.weight = getWeight(graph,i,j);
-			if(temp.weight > 0){
-				graph.mst.push_back(temp);
-			}
-		}
-	}*/
 }
 
 // return added weights of a list of edges
 int totalWeight(const std::vector<Edge>& edges)
 {
 	// TODO 5.1b: total weight accumulated over a given list of edges
-	long sum = 0;
+	int sum = 0;
 	for(const auto& element: edges){
 		sum+=element.weight;
 	}
-	return 0;
+	return sum;
 }
 
 void prim(Graph& graph)
