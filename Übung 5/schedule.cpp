@@ -3,6 +3,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <assert.h>
 
 struct Interval
 {
@@ -44,12 +45,37 @@ std::vector<Interval> createRandomeIntervals(size_t item_count)
 	return intervals;
 }
 
+// TODO 5.3: Sort intervals
+std::vector<Interval> sortIntervals(std::vector<Interval> intervals){
+	std::vector<Interval> sorted;
+	int min_end_time = 1000;
+	Interval nextInterval;
+	int iterator = -1;
+	while (intervals.size() > 0)
+	{
+		iterator = -1;
+		min_end_time = 1000;
+		for (int i = 0; i < intervals.size(); i++)
+		{
+			if(intervals[i].end < min_end_time){
+				min_end_time = intervals[i].end;
+				nextInterval = intervals[i];
+				iterator = i;
+			}
+		}
+		sorted.push_back(nextInterval);
+		assert(iterator >= 0);
+		intervals.erase(intervals.begin()+iterator);
+	}
+	
+	return sorted;
+}
+
 void schedule(const std::vector<Interval>& intervals)
 {
 	std::cout << std::endl << "Intervals (randomized):\n" << intervals;
 
-	// TODO 5.3: Sort intervals
-	std::vector<Interval> sorted = intervals;
+	std::vector<Interval> sorted = sortIntervals(intervals);
 
 	std::cout << std::endl << "Intervals (sorted):\n" << sorted;
 
