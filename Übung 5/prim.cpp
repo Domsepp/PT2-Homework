@@ -108,6 +108,28 @@ std::ostream& operator<<(std::ostream& os, const std::vector<Edge>& edges)
 	return os;
 }
 
+bool isProcessed(std::vector<Vertex> &test_vertices){
+	for(Vertex & ve: test_vertices){
+		if(!ve.processed){
+			return false;
+		}
+	}
+	return true;
+}
+Edge search_best_Edge(Graph &der_Graph){
+	Edge min_Edge;
+	int min_Edge_length = std::numeric_limits<int>::max();
+	for(Edge &ed : der_Graph.edges){
+		if(!der_Graph.vertices[ed.connected_vertices[1]].processed){
+			if(ed.weight<min_Edge_length){
+				min_Edge_length = ed.weight;
+				min_Edge = ed;
+			}
+		}
+	}
+	return min_Edge;
+}
+
 // construct vertices and edges for a given graph
 void createGraph(Graph& graph)
 {
@@ -120,6 +142,7 @@ void createGraph(Graph& graph)
 	Edge temp;
 	Vertex temp_Vertex;
 	temp_Vertex.index = 0;
+	
 
 	for(int i = 0; i<graph.vertex_count; i++){
 		temp_Vertex.index += 1;
@@ -132,6 +155,18 @@ void createGraph(Graph& graph)
 			}
 		}
 	}
+
+	std::cout << graph.edges <<std::endl;
+
+	Edge min_Edge;
+	while(!isProcessed(graph.vertices)){
+		min_Edge = search_best_Edge(graph);
+		graph.mst.push_back(min_Edge);
+		graph.vertices[min_Edge.connected_vertices[1]].processed = true;
+	}
+	std::cout << graph.mst << std::endl;
+
+
 	/* hier is noch nix fertig
 	int minWeight, tempindex;
 	for(int i = 0; i<graph.vertex_count; i++){
