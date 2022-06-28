@@ -31,11 +31,13 @@ public:
 
 private:
 	void simulateNextStep(const int n, Tower& a, Tower& b, Tower& c)
-	{
+	{	
+		moves ++;
+		std::cout << n << std::endl;
 		if (n == 1)
-		{
+		{	
 			int i = a.second[a.second.size()-1];
-			a.second.erase(a.second.end());
+			a.second.erase(a.second.end()-1);
 			c.second.emplace_back(i);
 			print();
 			std::ignore = getchar();
@@ -51,16 +53,20 @@ private:
 
 	void print()
 	{
+
 #ifdef _WIN32
 		std::system("cls");
 #else
 		std::system("clear");
 #endif
+		//std::system("clear");						// nur temporär, da das Programm WSL nicht erkennt
 
 		// TODO 5.2: Print current state	--> this produces the correct result once, but then produces bs
-		std::system("cls");
-		for (size_t i = item_count - 1; i >= 0; --i)
+		//std::system("cls");
+		
+		for (size_t i = item_count; i > 0; --i)
 		{
+			std::cout << "i: " << i << std::endl;
 			for (auto &tower: towers)
 			{
 				std::cout << "\t";
@@ -117,54 +123,27 @@ private:
 			
 		}
 		
-
-		std::cout << std::endl << std::endl;
+		std::cout << std::endl;
 	}
-
+	
 	std::array<Tower, 3> towers{ Tower('A', {}), Tower('B', {}), Tower('C', {}) };
 
 	int item_count;
 	unsigned int moves = 0;
 };
 
-std::string generate_line(int width){
-	std::string line = "  ";
-	std::cout << width << std::endl;
-	for(int i = 1; i<=21;i++){
-		if(i<=((21-width)/2) || i>=(21-((21-width)/2))){
-			line.push_back(' ');
-		}
-		else{
-			line.push_back('+');
-		}
-	}
-	line.push_back(' ');
-	return line;
-}
-
-void pretty_print(int first_pole, int second_pole, int third_pole){
-	std::vector<std::string> ouput_graphics;
-	for(int i = 0; i<first_pole;i++){
-		ouput_graphics.push_back(generate_line(((i*2)+3)));	
-	}
-	ouput_graphics.push_back(" #####################  #####################  ##################### ");
-	for(std::string &line: ouput_graphics){
-		std::cout << line << std::endl;
-	}
-}
 
 int main()
 {
-	/*constexpr int ItemCount = 4;
+	constexpr int ItemCount = 4;
 	TowerOfHanoi toh(ItemCount);
-	toh.runSimulation();*/
-	std::cout << "Press any key to continue...";
+	toh.runSimulation();
+	/*std::cout << "Press any key to continue...";
 	char ch = getchar();
 	std::cout << ch;
 	if(ch){
 		std::cout << "Congrats"<< std::endl;
-		pretty_print(5,4,5);
-	}
+	}*/
 
 	return 0;
 }
