@@ -32,8 +32,21 @@ public:
 private:
 	void simulateNextStep(const int n, Tower& a, Tower& b, Tower& c)
 	{
-		// move n plates from a over b to c
-		// TODO 5.2: Implement ToH and print
+		if (n == 1)
+		{
+			int i = a.second[a.second.size()-1];
+			a.second.erase(a.second.end());
+			c.second.emplace_back(i);
+			print();
+			std::ignore = getchar();
+		}else{
+			simulateNextStep(n-1, a, c, b);
+			simulateNextStep(1, a, b, c);
+			simulateNextStep(n-1, b, a, c);
+		}
+		
+		// move n plates from a over b to c  --> should be ready, but can't check correctness without proper printing
+		// TODO 5.2: Implement ToH and print --> i think calling print() should do it
 	}
 
 	void print()
@@ -44,7 +57,66 @@ private:
 		std::system("clear");
 #endif
 
-		// TODO 5.2: Print current state
+		// TODO 5.2: Print current state	--> this produces the correct result once, but then produces bs
+		std::system("cls");
+		for (size_t i = item_count - 1; i >= 0; --i)
+		{
+			for (auto &tower: towers)
+			{
+				std::cout << "\t";
+				for (size_t j = 0; j < item_count + 1; j++)
+				{
+					std::cout << " ";
+				}
+				std::cout << "#";
+				for (size_t j = 0; j < item_count + 1; j++)
+				{
+					std::cout << " ";
+				}
+			}
+			std::cout << "\n";
+			for (auto &tower: towers)
+			{
+				std::cout << "\t";
+				if (tower.second.size() < i + 1)
+				{
+					for (size_t j = 0; j < item_count + 1; j++)
+					{
+						std::cout << " ";
+					}
+					std::cout << "#";
+					for (size_t j = 0; j < item_count + 1; j++)
+					{
+						std::cout << " ";
+					}
+				} else {
+					for (size_t j = 0; j < item_count-tower.second[i] + 1; j++)
+					{
+						std::cout << " ";
+					}
+					for (size_t j = 0; j < 2*(tower.second[i]) + 1; j++)
+					{
+						std::cout << "&";
+					}
+					for (size_t j = 0; j < item_count-tower.second[i] + 1; j++)
+					{
+						std::cout << " ";
+					}
+				}
+			}
+			std::cout << "\n";
+		}
+		//somehow the following does not get printed
+		for (size_t i = 0; i < 3; i++)
+		{
+			std::cout << "\t";
+			for (size_t j = 0; j < 2*item_count+3; j++)
+			{
+				std::cout << "#";
+			}
+			
+		}
+		
 
 		std::cout << std::endl << std::endl;
 	}
