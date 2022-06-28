@@ -30,8 +30,20 @@ public:
 private:
 	void simulateNextStep(const int n, Tower& a, Tower& b, Tower& c)
 	{
-		// move n plates from a over b to c
-		// TODO 5.2: Implement ToH and print
+		if (n == 1)
+		{
+			int i = a.second[a.second.size()-1];
+			a.second.erase(a.second.end());
+			c.second.emplace_back(i);
+			print();
+		}else{
+			simulateNextStep(n-1, a, c, b);
+			simulateNextStep(1, a, b, c);
+			simulateNextStep(n-1, b, a, c);
+		}
+		
+		// move n plates from a over b to c  --> should be ready, but can't check correctness without printing
+		// TODO 5.2: Implement ToH and print --> i think calling print() should do it
 	}
 
 	void print()
