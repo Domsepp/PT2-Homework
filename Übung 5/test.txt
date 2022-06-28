@@ -1,0 +1,8 @@
+total 196
+-rwxrwxrwx 1 panter panter  52976 Jun 27 16:17 prim
+-rwxrwxrwx 1 panter panter   7702 Jun 27 16:20 prim.cpp
+-rwxrwxrwx 1 panter panter 107948 Jun 27 15:12 prim.exe
+-rwxrwxrwx 1 panter panter   1596 Jun 26 14:47 schedule.cpp
+-rwxrwxrwx 1 panter panter      0 Jun 28 13:56 test.txt
+-rwxrwxrwx 1 panter panter  17888 Jun 28 13:56 toh
+-rwxrwxrwx 1 panter panter   1206 Jun 28 13:55 toh.cpp
