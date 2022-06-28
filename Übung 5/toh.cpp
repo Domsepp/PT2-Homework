@@ -104,7 +104,7 @@ private:
 			}
 			std::cout << "\n";
 		}
-		std::cout << "hello here i am";
+		//somehow the following does not get printed
 		for (size_t i = 0; i < 3; i++)
 		{
 			std::cout << "\t";
