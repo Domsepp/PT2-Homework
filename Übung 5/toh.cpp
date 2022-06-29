@@ -32,7 +32,7 @@ public:
 private:
 	void simulateNextStep(const int n, Tower& a, Tower& b, Tower& c)
 	{	
-		moves ++;
+		
 		std::cout << n << std::endl;
 		if (n == 1)
 		{	
@@ -40,6 +40,7 @@ private:
 			a.second.erase(a.second.end()-1);
 			c.second.emplace_back(i);
 			print();
+			moves ++;
 			std::ignore = getchar();
 		}else{
 			simulateNextStep(n-1, a, c, b);
@@ -64,7 +65,7 @@ private:
 		// TODO 5.2: Print current state	--> this produces the correct result once, but then produces bs
 		//std::system("cls");
 		
-		for (size_t i = item_count; i > 0; --i)
+		for (int i = item_count-1; i >= 0; i--)
 		{
 			std::cout << "i: " << i << std::endl;
 			for (auto &tower: towers)
@@ -138,12 +139,6 @@ int main()
 	constexpr int ItemCount = 4;
 	TowerOfHanoi toh(ItemCount);
 	toh.runSimulation();
-	/*std::cout << "Press any key to continue...";
-	char ch = getchar();
-	std::cout << ch;
-	if(ch){
-		std::cout << "Congrats"<< std::endl;
-	}*/
 
 	return 0;
 }
