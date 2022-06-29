@@ -24,7 +24,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<Interval>& interval
 		{
 			if (i >= interval.start && i <= interval.end)
 			{
-				os << "#";
+				os << char(219);
 			}
 			else{
 				os << "-";
