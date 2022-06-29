@@ -32,7 +32,6 @@ public:
 private:
 	void simulateNextStep(const int n, Tower& a, Tower& b, Tower& c)
 	{	
-		std::cout << n << std::endl;
 		if (n == 1)
 		{	
 			int i = a.second[a.second.size()-1];
@@ -46,9 +45,6 @@ private:
 			simulateNextStep(1, a, b, c);
 			simulateNextStep(n-1, b, a, c);
 		}
-		
-		// move n plates from a over b to c  --> should be ready, but can't check correctness without proper printing
-		// TODO 5.2: Implement ToH and print --> i think calling print() should do it
 	}
 
 	void print()
@@ -59,14 +55,8 @@ private:
 #else
 		std::system("clear");
 #endif
-		//std::system("clear");						// nur temporär, da das Programm WSL nicht erkennt
-
-		// TODO 5.2: Print current state	--> this produces the correct result once, but then produces bs
-		//std::system("cls");
-		
 		for (int i = item_count - 1; i >= 0; i--)
 		{
-			//std::cout << "i: " << i << std::endl;
 			for (auto &tower: towers)
 			{
 				std::cout << "\t";
@@ -74,7 +64,7 @@ private:
 				{
 					std::cout << " ";
 				}
-				std::cout << "#";
+				std::cout << char(219);
 				for (size_t j = 0; j < item_count + 1; j++)
 				{
 					std::cout << " ";
@@ -90,7 +80,7 @@ private:
 					{
 						std::cout << " ";
 					}
-					std::cout << "#";
+					std::cout << char(219);
 					for (size_t j = 0; j < item_count + 1; j++)
 					{
 						std::cout << " ";
@@ -102,7 +92,7 @@ private:
 					}
 					for (size_t j = 0; j < 2*(tower.second[i]) + 1; j++)
 					{
-						std::cout << (char)254u;
+						std::cout << char(219);
 					}
 					for (size_t j = 0; j < item_count-tower.second[i] + 1; j++)
 					{
@@ -134,7 +124,6 @@ private:
 				std::cout << "-";
 			}
 		}
-		
 		std::cout << std::endl;
 	}
 	
@@ -150,12 +139,6 @@ int main()
 	constexpr int ItemCount = 5;
 	TowerOfHanoi toh(ItemCount);
 	toh.runSimulation();
-	/*std::cout << "Press any key to continue...";
-	char ch = getchar();
-	std::cout << ch;
-	if(ch){
-		std::cout << "Congrats"<< std::endl;
-	}*/
 
 	return 0;
 }
