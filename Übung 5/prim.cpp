@@ -111,6 +111,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<Edge>& edges)
 bool isProcessed(std::vector<Vertex> &test_vertices){
 	for(Vertex & ve: test_vertices){
 		if(!ve.processed){
+			std::cout << ve.index << std::endl;
 			return false;
 		}
 	}
@@ -149,7 +150,7 @@ void createGraph(Graph& graph)
 	temp_Vertex.index = 0;
 	
 	for(int i = 0; i<graph.vertex_count; i++){
-		temp_Vertex.index += 1;
+		//temp_Vertex.index += 1;
 		for(int j = i; j<graph.vertex_count;j++){
 			temp.connected_vertices = {i,j};
 			temp.weight = getWeight(graph,i,j);
@@ -158,6 +159,7 @@ void createGraph(Graph& graph)
 				graph.vertices.push_back(temp_Vertex);
 			}
 		}
+		temp_Vertex.index += 1;
 	}
 
 	std::cout << graph.edges <<std::endl;
@@ -182,7 +184,8 @@ void prim(Graph& graph)
 
 	// TODO 5.1c: implement prim algorithm
 	Edge min_Edge;
-	while(!isProcessed(graph.vertices)){
+	bool processed = isProcessed(graph.vertices);
+	while(!processed){
 		min_Edge = search_best_Edge(graph);
 		//std::cout << "Hi!" << std::endl;
 		graph.mst.push_back(min_Edge);
@@ -191,6 +194,8 @@ void prim(Graph& graph)
 		graph.vertices[min_Edge.connected_vertices[1]].processed = true;
 		graph.vertices[min_Edge.connected_vertices[1]].parent_index = graph.vertices[min_Edge.connected_vertices[0]].index;
 		std::cout << "Start: " << min_Edge.connected_vertices[0] << ", Ende: " << min_Edge.connected_vertices[1] << ", Weight: " << min_Edge.weight << std::endl;
+		std::cout << "parent: " << graph.vertices[min_Edge.connected_vertices[0]].index << std::endl;
+		processed = isProcessed(graph.vertices);
 	}
 	std::cout << graph.mst << std::endl;
 }
