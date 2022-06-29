@@ -102,7 +102,7 @@ private:
 					}
 					for (size_t j = 0; j < 2*(tower.second[i]) + 1; j++)
 					{
-						std::cout << "&";
+						std::cout << (char)254u;
 					}
 					for (size_t j = 0; j < item_count-tower.second[i] + 1; j++)
 					{
@@ -147,7 +147,7 @@ private:
 
 int main()
 {
-	constexpr int ItemCount = 4;
+	constexpr int ItemCount = 5;
 	TowerOfHanoi toh(ItemCount);
 	toh.runSimulation();
 	/*std::cout << "Press any key to continue...";
