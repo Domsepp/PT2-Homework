@@ -32,13 +32,13 @@ public:
 private:
 	void simulateNextStep(const int n, Tower& a, Tower& b, Tower& c)
 	{	
-		moves ++;
 		std::cout << n << std::endl;
 		if (n == 1)
 		{	
 			int i = a.second[a.second.size()-1];
 			a.second.erase(a.second.end()-1);
 			c.second.emplace_back(i);
+			moves ++;
 			print();
 			std::ignore = getchar();
 		}else{
@@ -64,9 +64,9 @@ private:
 		// TODO 5.2: Print current state	--> this produces the correct result once, but then produces bs
 		//std::system("cls");
 		
-		for (size_t i = item_count; i > 0; --i)
+		for (int i = item_count - 1; i >= 0; i--)
 		{
-			std::cout << "i: " << i << std::endl;
+			//std::cout << "i: " << i << std::endl;
 			for (auto &tower: towers)
 			{
 				std::cout << "\t";
@@ -112,15 +112,27 @@ private:
 			}
 			std::cout << "\n";
 		}
-		//somehow the following does not get printed
 		for (size_t i = 0; i < 3; i++)
 		{
 			std::cout << "\t";
-			for (size_t j = 0; j < 2*item_count+3; j++)
+			for (size_t j = 0; j < 2*item_count + 3; j++)
 			{
-				std::cout << "#";
+				std::cout << "-";
 			}
-			
+		}
+		std::cout << std::endl;
+		for (size_t i = 0; i < 3; i++)
+		{
+			std::cout << "\t";
+			for (size_t j = 0; j < item_count + 1; j++)
+			{
+				std::cout << "-";
+			}
+			std::cout << char('A' + i);
+			for (size_t j = 0; j < item_count + 1; j++)
+			{
+				std::cout << "-";
+			}
 		}
 		
 		std::cout << std::endl;
