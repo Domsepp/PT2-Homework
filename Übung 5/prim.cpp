@@ -122,16 +122,19 @@ Edge search_best_Edge(Graph &der_Graph){
 	Edge min_Edge;
 	int min_Edge_length = std::numeric_limits<int>::max();
 	for(Edge &ed : der_Graph.edges){
-		if(/* der_Graph.vertices[ed.connected_vertices[0]].processed && */ !der_Graph.vertices[ed.connected_vertices[1]].processed){
+		std::cout<< ed.connected_vertices[0] << ", " << ed.connected_vertices[1] << ", " << ed.weight << ", " << min_Edge_length << std::endl; 
+		if( der_Graph.vertices[ed.connected_vertices[0]].processed &&  !der_Graph.vertices[ed.connected_vertices[1]].processed){					// die Bedingung wird nicht erfüllt, und deshalb wird keine kleine Edge-lenght festgelegt
 			//std::cout << ed.connected_vertices[0] << std::endl;
 			if(ed.weight<min_Edge_length){
 				min_Edge_length = ed.weight;
+				std::cout << "lower "<< std::endl;
 				min_Edge = ed;
 			}
 		}
 	}
 	//std::cout << "numeric Limits: " << min_Edge_length << std::endl;
 	//std::cout << "minimum Edge: " << min_Edge.weight << std::endl;
+
 	std::cout << "min_Edge: " << min_Edge.connected_vertices[0] << ", "<< min_Edge.connected_vertices[1] << std::endl;
 	return min_Edge;
 }
