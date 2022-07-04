@@ -110,9 +110,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<Edge>& edges)
 
 bool isProcessed(std::vector<Vertex> &test_vertices){
 	for(Vertex & ve: test_vertices){
-		std::cout << "p or not p: " << ve.processed<< "Vertex: " << ve << std::endl;
 		if(!ve.processed){
-			std::cout << ve.index << std::endl;
 			return false;
 		}
 	}
@@ -123,20 +121,13 @@ Edge search_best_Edge(Graph &der_Graph){
 	Edge min_Edge;
 	int min_Edge_length = std::numeric_limits<int>::max();
 	for(Edge &ed : der_Graph.edges){
-		//std::cout<< ed.connected_vertices[0] << ", " << ed.connected_vertices[1] << ", " << ed.weight << ", " << min_Edge_length << std::endl; 
-		if( der_Graph.vertices[ed.connected_vertices[0]].processed &&  !der_Graph.vertices[ed.connected_vertices[1]].processed){					// die Bedingung wird nicht erfüllt, und deshalb wird keine kleine Edge-lenght festgelegt
-			//std::cout << ed.connected_vertices[0] << std::endl;
+		if( der_Graph.vertices[ed.connected_vertices[0]].processed !=  der_Graph.vertices[ed.connected_vertices[1]].processed){
 			if(ed.weight<min_Edge_length){
 				min_Edge_length = ed.weight;
-				std::cout << "lower "<< std::endl;
 				min_Edge = ed;
 			}
 		}
 	}
-	//std::cout << "numeric Limits: " << min_Edge_length << std::endl;
-	//std::cout << "minimum Edge: " << min_Edge.weight << std::endl;
-
-	std::cout << "min_Edge: " << min_Edge.connected_vertices[0] << ", "<< min_Edge.connected_vertices[1] << std::endl;
 	return min_Edge;
 }
 
@@ -154,21 +145,16 @@ void createGraph(Graph& graph)
 	temp_Vertex.index = 0;
 	
 	for(int i = 0; i<graph.vertex_count; i++){
-		//temp_Vertex.index += 1;
-		for(int j = i; j<graph.vertex_count;j++){
+		graph.vertices.push_back(temp_Vertex);
+		for(int j = i + 1; j < graph.vertex_count;j++){
 			temp.connected_vertices = {i,j};
 			temp.weight = getWeight(graph,i,j);
-			if(temp.weight > 0){
+			if(temp.weight >= 0){
 				graph.edges.push_back(temp);
-				graph.vertices.push_back(temp_Vertex);
 			}
-			std::cout <<"  "<< temp.weight;
 		}
 		temp_Vertex.index += 1;
-		std::cout << std::endl;
 	}
-
-	std::cout << graph.edges <<std::endl;
 }
 
 // return added weights of a list of edges
@@ -193,38 +179,39 @@ void prim(Graph& graph)
 	bool processed = isProcessed(graph.vertices);
 	do{
 		min_Edge = search_best_Edge(graph);
-		//std::cout << "Hi!" << std::endl;
 		graph.mst.push_back(min_Edge);
-		//std::cout << "Hi!2" << std::endl;
-		//graph.vertices[min_Edge.connected_vertices[0]].processed = true;
-		graph.vertices[min_Edge.connected_vertices[1]].processed = true;
-		graph.vertices[min_Edge.connected_vertices[0]].processed = true;
 
-		graph.vertices[min_Edge.connected_vertices[0]].parent_index = min_Edge.connected_vertices[0];
-		std::cout << "Start: " << min_Edge.connected_vertices[0] << ", Ende: " << min_Edge.connected_vertices[1] << ", Weight: " << min_Edge.weight << std::endl;
-		std::cout << "parent: " << graph.vertices[min_Edge.connected_vertices[0]].parent_index << std::endl;
+		if (graph.vertices[min_Edge.connected_vertices[0]].processed)
+		{
+			graph.vertices[min_Edge.connected_vertices[1]].parent_index = min_Edge.connected_vertices[0];
+		}else{
+			assert(graph.vertices[min_Edge.connected_vertices[1]].processed);
+			graph.vertices[min_Edge.connected_vertices[0]].parent_index = min_Edge.connected_vertices[1];
+		}
+		
+		graph.vertices[min_Edge.connected_vertices[0]].processed = true;
+		graph.vertices[min_Edge.connected_vertices[1]].processed = true;
 		processed = isProcessed(graph.vertices);
 	}while(!processed);
-	std::cout << graph.mst << std::endl;
 }
 
 int main()
 {
 	// Example 1 (small)
-	Graph graph1;
+	/*Graph graph1;
 	graph1.vertex_count = N1;
 	graph1.weights_table = weights_table_1.data();
 	createGraph(graph1);
 	prim(graph1);
-	std::cout << "Example 1: " << graph1.mst << ", total costs: " << totalWeight(graph1.mst) << std::endl;
+	std::cout << "Example 1: " << graph1.mst << ", total costs: " << totalWeight(graph1.mst) << std::endl;*/
 
 	// Example 2 (larger)
-	/*Graph graph2;
+	Graph graph2;
 	graph2.vertex_count = N2;
 	graph2.weights_table = weights_table_2.data();
 	createGraph(graph2);
 	prim(graph2);
-	std::cout << "Example 2: " << graph2.mst << ", total costs: " << totalWeight(graph2.mst) << std::endl;*/
+	std::cout << "Example 2: " << graph2.mst << ", total costs: " << totalWeight(graph2.mst) << std::endl;
 
 	return 0;
 }
