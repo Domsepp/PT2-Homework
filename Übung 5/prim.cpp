@@ -122,17 +122,17 @@ Edge search_best_Edge(Graph &der_Graph){
 	Edge min_Edge;
 	int min_Edge_length = std::numeric_limits<int>::max();
 	for(Edge &ed : der_Graph.edges){
-		if(der_Graph.vertices[ed.connected_vertices[0]].processed && !der_Graph.vertices[ed.connected_vertices[1]].processed){
+		if(/* der_Graph.vertices[ed.connected_vertices[0]].processed && */ !der_Graph.vertices[ed.connected_vertices[1]].processed){
 			//std::cout << ed.connected_vertices[0] << std::endl;
 			if(ed.weight<min_Edge_length){
 				min_Edge_length = ed.weight;
 				min_Edge = ed;
-				//std::cout << min_Edge_length << std::endl;
 			}
 		}
 	}
 	//std::cout << "numeric Limits: " << min_Edge_length << std::endl;
 	//std::cout << "minimum Edge: " << min_Edge.weight << std::endl;
+	std::cout << "min_Edge: " << min_Edge.connected_vertices[0] << ", "<< min_Edge.connected_vertices[1] << std::endl;
 	return min_Edge;
 }
 
@@ -158,8 +158,10 @@ void createGraph(Graph& graph)
 				graph.edges.push_back(temp);
 				graph.vertices.push_back(temp_Vertex);
 			}
+			std::cout <<"  "<< temp.weight;
 		}
 		temp_Vertex.index += 1;
+		std::cout << std::endl;
 	}
 
 	std::cout << graph.edges <<std::endl;
@@ -192,9 +194,11 @@ void prim(Graph& graph)
 		//std::cout << "Hi!2" << std::endl;
 		//graph.vertices[min_Edge.connected_vertices[0]].processed = true;
 		graph.vertices[min_Edge.connected_vertices[1]].processed = true;
-		graph.vertices[min_Edge.connected_vertices[1]].parent_index = graph.vertices[min_Edge.connected_vertices[0]].index;
+		graph.vertices[min_Edge.connected_vertices[0]].processed = true;
+
+		graph.vertices[min_Edge.connected_vertices[0]].parent_index = min_Edge.connected_vertices[0];
 		std::cout << "Start: " << min_Edge.connected_vertices[0] << ", Ende: " << min_Edge.connected_vertices[1] << ", Weight: " << min_Edge.weight << std::endl;
-		std::cout << "parent: " << graph.vertices[min_Edge.connected_vertices[0]].index << std::endl;
+		std::cout << "parent: " << graph.vertices[min_Edge.connected_vertices[0]].parent_index << std::endl;
 		processed = isProcessed(graph.vertices);
 	}
 	std::cout << graph.mst << std::endl;
