@@ -110,6 +110,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<Edge>& edges)
 
 bool isProcessed(std::vector<Vertex> &test_vertices){
 	for(Vertex & ve: test_vertices){
+		std::cout << "p or not p: " << ve.processed<< "Vertex: " << ve << std::endl;
 		if(!ve.processed){
 			std::cout << ve.index << std::endl;
 			return false;
@@ -122,7 +123,7 @@ Edge search_best_Edge(Graph &der_Graph){
 	Edge min_Edge;
 	int min_Edge_length = std::numeric_limits<int>::max();
 	for(Edge &ed : der_Graph.edges){
-		std::cout<< ed.connected_vertices[0] << ", " << ed.connected_vertices[1] << ", " << ed.weight << ", " << min_Edge_length << std::endl; 
+		//std::cout<< ed.connected_vertices[0] << ", " << ed.connected_vertices[1] << ", " << ed.weight << ", " << min_Edge_length << std::endl; 
 		if( der_Graph.vertices[ed.connected_vertices[0]].processed &&  !der_Graph.vertices[ed.connected_vertices[1]].processed){					// die Bedingung wird nicht erfüllt, und deshalb wird keine kleine Edge-lenght festgelegt
 			//std::cout << ed.connected_vertices[0] << std::endl;
 			if(ed.weight<min_Edge_length){
@@ -190,7 +191,7 @@ void prim(Graph& graph)
 	// TODO 5.1c: implement prim algorithm
 	Edge min_Edge;
 	bool processed = isProcessed(graph.vertices);
-	while(!processed){
+	do{
 		min_Edge = search_best_Edge(graph);
 		//std::cout << "Hi!" << std::endl;
 		graph.mst.push_back(min_Edge);
@@ -203,7 +204,7 @@ void prim(Graph& graph)
 		std::cout << "Start: " << min_Edge.connected_vertices[0] << ", Ende: " << min_Edge.connected_vertices[1] << ", Weight: " << min_Edge.weight << std::endl;
 		std::cout << "parent: " << graph.vertices[min_Edge.connected_vertices[0]].parent_index << std::endl;
 		processed = isProcessed(graph.vertices);
-	}
+	}while(!processed);
 	std::cout << graph.mst << std::endl;
 }
 
