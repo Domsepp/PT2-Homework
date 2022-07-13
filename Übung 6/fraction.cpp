@@ -19,9 +19,16 @@ class Fraction{
 		n_ = 1;
 	}
 
-	friend std::ostream& operator<< (std::ostream& os,Fraction& frac);
+	friend std::ostream& operator<< (std::ostream& os,Fraction frac);
 
-	Fraction reduce(Fraction& frac){
+	//dürfen wir eigentlich nicht, aber ja...:
+	friend Fraction operator+ (Fraction frac1,Fraction frac2);
+	friend Fraction operator- (Fraction frac1,Fraction frac2);
+	friend Fraction operator* (Fraction frac1,Fraction frac2);
+	friend Fraction operator/ (Fraction frac1,Fraction frac2);
+
+	void reduce(Fraction& frac){
+		assert(frac.n_!=0);
 		bool neg = false;
 		int small, large;
 		if(frac.n_<0 != frac.z_<0){
@@ -50,16 +57,49 @@ class Fraction{
 };
 
 
-std::ostream& operator<<(std::ostream& os,Fraction& frac){
+std::ostream& operator<<(std::ostream& os,Fraction frac){
+	frac.reduce(frac);
+	if (frac.z_< 0) {
+		os << "-";
+	}
 	if(std::abs(frac.z_) < std::abs(frac.n_)){
 		os << frac.z_ << "/" << frac.n_;
+	}else{
+		os << (std::abs(frac.z_)/(std::abs(frac.n_))) << " " << (std::abs(frac.z_)%(std::abs(frac.n_))) << "/" << std::abs(frac.n_);
 	}
 	return os;
+}
+
+Fraction operator+(Fraction frac1, Fraction frac2){
+	Fraction result = Fraction(frac1.z_*frac2.n_+frac1.n_*frac2.z_,frac1.n_*frac2.n_);
+	result.reduce(result);
+	return result;
+}
+
+Fraction operator-(Fraction frac1, Fraction frac2){
+	Fraction result = Fraction(frac1.z_*frac2.n_-frac1.n_*frac2.z_,frac1.n_*frac2.n_);
+	result.reduce(result);
+	return result;
+}
+
+Fraction operator*(Fraction frac1, Fraction frac2){
+	Fraction result = Fraction(frac1.z_*frac2.z_,frac1.n_*frac2.n_);
+	result.reduce(result);
+	return result;
+}
+
+Fraction operator/(Fraction frac1, Fraction frac2){
+	assert(frac2.z_!=0);
+	Fraction result = Fraction(frac1.z_*frac2.n_,frac1.n_*frac2.z_);
+	result.reduce(result);
+	return result;
 }
 
 
 void runTests()
 {
+	std::cout << Fraction(2,3) << std::endl;
+	std::cout << Fraction(5,4) << std::endl;
 	/* Test exception */
 	// try
 	//{
@@ -70,19 +110,16 @@ void runTests()
 	//{
 	//}
 	// std::cout << Fraction(2, 3) - Fraction(2, 3) << '\n'; // Should print 0 and not throw an exception
-	Fraction frac = Fraction(2,3);
-	
-	std::cout << frac << "\n";
 
 	/* Store values instead of generating them inline to better test the method's signature */
-	// const Fraction fraction_4_5(4, 5);
-	// const Fraction fraction_1_3(1, 3);
+	 const Fraction fraction_4_5(4, 5);
+	 const Fraction fraction_1_3(1, 3);
 
 	/* Some simple test cases for operator overloading of fractions */
-	// std::cout << fraction_4_5 + Fraction(2, 4) << '\n'; // Should print "1 3/10"
-	// std::cout << fraction_4_5 - Fraction(2, 4) << '\n'; // Should print "3/10"
-	// std::cout << fraction_1_3 * Fraction(2, 4) << '\n'; // Should print "1/6"
-	// std::cout << fraction_1_3 / Fraction(2, 4) << '\n'; // Should print "2/3"
+	std::cout << fraction_4_5 + Fraction(2, 4) << '\n'; // Should print "1 3/10"
+	std::cout << fraction_4_5 - Fraction(2, 4) << '\n'; // Should print "3/10"
+	std::cout << fraction_1_3 * Fraction(2, 4) << '\n'; // Should print "1/6"
+	std::cout << fraction_1_3 / Fraction(2, 4) << '\n'; // Should print "2/3"
 
 	/* Some simple test cases for operator overloading of fractions in connection with integers */
 	// std::cout << fraction_4_5 + 2 << '\n'; // Should print "2 4/5"
