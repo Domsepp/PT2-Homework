@@ -20,7 +20,7 @@ class Account {
 		return m_accountNumber;
 	}
 
-	bool transaction(int64_t amount, const std::string& reason) {
+	virtual bool transaction(int64_t amount, const std::string& reason) {
 		std::cout << "Account " << m_accountNumber << ": Transaction (Amount: " << amount
 				  << " Reason: " << reason << ")\n";
 		m_balance += amount;
@@ -63,9 +63,10 @@ int main() {
 
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::bernoulli_distribution youthAccountDistrib(1);
+	std::bernoulli_distribution youthAccountDistrib(1); // used to be 0.25
 	std::uniform_int_distribution<> initDepositDistrib(0, 50); // ohne <> wirft es bei mir nen error: missing template arguments before 'initDepositDistrib'
-
+	int64_t init = initDepositDistrib(gen);
+	m_accounts.push_back(YouthAccount(-1));
 	constexpr int accountCount = 3; // used to be 20
 	for (int i = 0; i < accountCount; ++i) {
 		//m_accounts.push_back(Account(i)); // TODO: Remove this line and create specific account instead
@@ -73,6 +74,7 @@ int main() {
 			// Create YouthAccount
 			YouthAccount temp = YouthAccount(i);
 			m_accounts.push_back(temp);
+			m_accounts.back().transaction(init, "Youth welcome gift");
 		} else {
 			// Create SavingAccount
 			SavingAccount temp = SavingAccount(i);
@@ -82,7 +84,7 @@ int main() {
 	}
 
 	std::uniform_int_distribution<> transactionDistrib(-100, 100); //same here as in line 67
-	constexpr int simulationRuns = 5;
+	constexpr int simulationRuns = 2; // used to be 5
 	for (int i = 0; i < simulationRuns; ++i) {
 		for (auto& account : m_accounts) {
 			account.transaction(transactionDistrib(gen), "Random transaction");
