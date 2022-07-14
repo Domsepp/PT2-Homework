@@ -106,6 +106,37 @@ Fraction operator/(Fraction frac1, Fraction frac2){
 	return result;
 }
 
+Fraction operator+(int i, Fraction frac){
+	return Fraction(i) + frac;
+}
+
+Fraction operator+(Fraction frac, int i){
+	return Fraction(i) + frac;
+}
+
+Fraction operator-(Fraction frac, int i){
+	return frac - Fraction(i);
+}
+
+Fraction operator-(int i, Fraction frac){
+	return Fraction(i) - frac;
+}
+
+Fraction operator*(int i, Fraction frac){
+	return Fraction(i) * frac;
+}
+
+Fraction operator*(Fraction frac, int i){
+	return Fraction(i) * frac;
+}
+
+Fraction operator/(Fraction frac, int i){
+	return frac / Fraction(i);
+}
+
+Fraction operator/(int i, Fraction frac){
+	return Fraction(i) / frac;
+}
 
 void runTests()
 {
@@ -131,7 +162,7 @@ void runTests()
 	std::cout << fraction_1_3 / Fraction(2, 4) << '\n'; // Should print "2/3"
 
 	/* Some simple test cases for operator overloading of fractions in connection with integers */
-	// std::cout << fraction_4_5 + 2 << '\n'; // Should print "2 4/5"
+	std::cout << fraction_4_5 + 2 << '\n'; // Should print "2 4/5"
 	// std::cout << fraction_4_5 - 2 << '\n'; // Should print "-1 1/5"
 	// std::cout << fraction_1_3 * 3 << '\n'; // Should print "1"
 	// std::cout << fraction_1_3 / 3 << '\n'; // Should print "1/9"
