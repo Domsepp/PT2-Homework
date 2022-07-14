@@ -11,7 +11,9 @@ class Fraction{
 
 	Fraction(int z, int n){
 		z_ = z;
-		assert(n!=0);
+		if (n == 0) {
+			throw std::invalid_argument("Nenner eines Bruchs darf nicht 0 sein.");
+		}
 		n_ = n;
 	}
 	Fraction(int z){
@@ -28,7 +30,13 @@ class Fraction{
 	friend Fraction operator/ (Fraction frac1,Fraction frac2);
 
 	void reduce(Fraction& frac){
-		assert(frac.n_!=0);
+		if (frac.n_ == 0) {
+			throw std::invalid_argument("Nenner eines Bruchs darf nicht 0 sein.");
+		}
+		if(frac.z_==0){
+			frac.n_=1;
+			return;
+		}
 		bool neg = false;
 		int small, large;
 		if(frac.n_<0 != frac.z_<0){
@@ -61,11 +69,14 @@ std::ostream& operator<<(std::ostream& os,Fraction frac){
 	frac.reduce(frac);
 	if (frac.z_< 0) {
 		os << "-";
-	}
-	if(std::abs(frac.z_) < std::abs(frac.n_)){
-		os << frac.z_ << "/" << frac.n_;
-	}else{
-		os << (std::abs(frac.z_)/(std::abs(frac.n_))) << " " << (std::abs(frac.z_)%(std::abs(frac.n_))) << "/" << std::abs(frac.n_);
+	}else if (frac.z_ == 0){
+		os << 0;
+	}else {
+		if(std::abs(frac.z_) < std::abs(frac.n_)){
+			os << frac.z_ << "/" << frac.n_;
+		}else{
+			os << (std::abs(frac.z_)/(std::abs(frac.n_))) << " " << (std::abs(frac.z_)%(std::abs(frac.n_))) << "/" << std::abs(frac.n_);
+		}
 	}
 	return os;
 }
@@ -98,18 +109,16 @@ Fraction operator/(Fraction frac1, Fraction frac2){
 
 void runTests()
 {
-	std::cout << Fraction(2,3) << std::endl;
-	std::cout << Fraction(5,4) << std::endl;
+	std::cout << Fraction(2,3) << std::endl; // Should print "2/3"
+	std::cout << Fraction(5,4) << std::endl; // Should print "1 1/4"
 	/* Test exception */
-	// try
-	//{
-	//	std::cout << Fraction(4, 0);
-	//	assert(false);
-	//}
-	// catch (const std::invalid_argument&)
-	//{
-	//}
-	// std::cout << Fraction(2, 3) - Fraction(2, 3) << '\n'; // Should print 0 and not throw an exception
+	try{
+		std::cout << Fraction(4, 0);
+		assert(false);
+	} catch (const std::invalid_argument&) {
+		std::cout << "Invalid input." << std::endl;
+	}
+	std::cout << Fraction(2, 3) - Fraction(2, 3) << '\n'; // Should print 0 and not throw an exception
 
 	/* Store values instead of generating them inline to better test the method's signature */
 	 const Fraction fraction_4_5(4, 5);
