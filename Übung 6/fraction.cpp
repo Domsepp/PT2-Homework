@@ -33,13 +33,13 @@ class Fraction{
 		if (frac.n_ == 0) {
 			throw std::invalid_argument("Nenner eines Bruchs darf nicht 0 sein.");
 		}
-		if(frac.z_==0){
-			frac.n_=1;
+		if (frac.z_ == 0 || frac.n_ == 1){
+			frac.n_ = 1;
 			return;
 		}
 		bool neg = false;
 		int small, large;
-		if(frac.n_<0 != frac.z_<0){
+		if (frac.n_ < 0 != frac.z_ < 0){
 			neg = true;
 		}
 		frac.n_ = std::abs(frac.n_);
@@ -60,7 +60,7 @@ class Fraction{
 		}
 		frac.n_ /= large;
 		frac.z_ /= large;
-		if(neg) frac.n_ *= -1;
+		if (neg) frac.z_ *= -1;
 	}
 };
 
@@ -71,13 +71,16 @@ std::ostream& operator<<(std::ostream& os,Fraction frac){
 		os << "-";
 	}else if (frac.z_ == 0){
 		os << 0;
-	}else {
-		if(std::abs(frac.z_) < std::abs(frac.n_)){
-			os << frac.z_ << "/" << frac.n_;
-		}else{
-			os << (std::abs(frac.z_)/(std::abs(frac.n_))) << " " << (std::abs(frac.z_)%(std::abs(frac.n_))) << "/" << std::abs(frac.n_);
-		}
+		return os;
 	}
+	if ((std::abs(frac.z_)%std::abs(frac.n_))== 0) {
+		os << (std::abs(frac.z_)/(std::abs(frac.n_)));
+	} else if(std::abs(frac.z_) < std::abs(frac.n_)) {
+		os << frac.z_ << "/" << frac.n_;
+	} else {
+		os << (std::abs(frac.z_)/(std::abs(frac.n_))) << " " << (std::abs(frac.z_)%(std::abs(frac.n_))) << "/" << std::abs(frac.n_);
+	}
+	
 	return os;
 }
 
@@ -140,8 +143,10 @@ Fraction operator/(int i, Fraction frac){
 
 void runTests()
 {
+	/*Die folgenden drei Zeilen sind selbst eingefügt.*/
 	std::cout << Fraction(2,3) << std::endl; // Should print "2/3"
 	std::cout << Fraction(5,4) << std::endl; // Should print "1 1/4"
+	std::cout << Fraction(9,3) << std::endl; // Should print "3"
 	/* Test exception */
 	try{
 		std::cout << Fraction(4, 0);
@@ -163,23 +168,25 @@ void runTests()
 
 	/* Some simple test cases for operator overloading of fractions in connection with integers */
 	std::cout << fraction_4_5 + 2 << '\n'; // Should print "2 4/5"
-	// std::cout << fraction_4_5 - 2 << '\n'; // Should print "-1 1/5"
-	// std::cout << fraction_1_3 * 3 << '\n'; // Should print "1"
-	// std::cout << fraction_1_3 / 3 << '\n'; // Should print "1/9"
+	std::cout << fraction_4_5 - 2 << '\n'; // Should print "-1 1/5"
+	std::cout << fraction_1_3 * 3 << '\n'; // Should print "1"
+	std::cout << fraction_1_3 / 3 << '\n'; // Should print "1/9"
 
 	/* Test global operator functions */
-	// std::cout << 2 + fraction_4_5 << '\n'; // Should print "2 4/5"
-	// std::cout << 2 - fraction_4_5 << '\n'; // Should print "1 1/5"
-	// std::cout << -3 * fraction_1_3 << '\n'; // Should print "-1"
-	// std::cout << -3 / fraction_1_3 << '\n'; // Should print "-1/9"
+	std::cout << 2 + fraction_4_5 << '\n'; // Should print "2 4/5"
+	std::cout << 2 - fraction_4_5 << '\n'; // Should print "1 1/5"
+	std::cout << -3 * fraction_1_3 << '\n'; // Should print "-1"
+	std::cout << -3 / fraction_1_3 << '\n'; // Should print "-9"
 
-	/* Test constexpr */
-	// constexpr Fraction constexprFrac =
-	//	-1 * ((Fraction(4, 5) / 2 + Fraction(2, 4) * (Fraction(3, 9) - 1)) * 3 + 4 - Fraction(1, 5))
-	//	/ Fraction(7, 2);
-	// std::cout << constexprFrac << '\n'; // Should print "-1 1/7"
+	/*So funktioniert es, aber die Test constexpr drunter wird nicht erkannt (die folgenden zwei Zeilen hab ich selbst eingefügt)*/
+	// Fraction constexprFractest = -1 * ((Fraction(4, 5) / 2 + Fraction(2, 4) * (Fraction(3, 9) - 1)) * 3 + 4 - Fraction(1, 5)) / Fraction(7, 2);
+	// std::cout << constexprFractest << "\n"; // Should print "-1 1/7"
 
-	/* Test User - defined conversion function */
+	/* Test constexpr (ZA2)*/
+	//constexpr Fraction constexprFrac = -1 * ((Fraction(4, 5) / 2 + Fraction(2, 4) * (Fraction(3, 9) - 1)) * 3 + 4 - Fraction(1, 5)) / Fraction(7, 2);
+	//std::cout << constexprFrac << '\n'; // Should print "-1 1/7"
+
+	/* Test User - defined conversion function (ZA1)*/
 	// double castedValue = static_cast<double>(Fraction(3, 4));
 	// std::cout << castedValue << '\n'; // Should print 0.75
 }
