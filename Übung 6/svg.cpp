@@ -59,6 +59,9 @@ std::unique_ptr<TreeNode> newTree(const std::vector<int>& ids)
 
 void depthFirstTraversal(const TreeNode* root)
 {
+	std::vector<TreeNode*> traversedNodes;
+
+	for(TreeNode node : )
 	// TODO 6.3a: Traverse the tree depth-first
 }
 
