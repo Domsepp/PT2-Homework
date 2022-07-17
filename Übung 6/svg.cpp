@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <stack>
+#include <algorithm>
 
 struct TreeNode
 {
@@ -60,13 +61,28 @@ std::unique_ptr<TreeNode> newTree(const std::vector<int>& ids)
 
 void depthFirstTraversal(const TreeNode* root)
 {
-	std::vector<TreeNode*> traversedNodes;
-	std::stack<TreeNode*> treeStack;
+	std::vector<int> traversedNodes;
 
-	while(root != NULL){
-		root = root->leftChild.get();
+	while(true){
+		std::cout << "loopstart\n";
+		if(!(std::count(traversedNodes.begin(),traversedNodes.end(),root->id))){
+			traversedNodes.push_back(root->id);
+			std::cout<<root->id<<" , ";
+			std::cout<<"added\n";
+		}
+		if(root->leftChild &&!(std::count(traversedNodes.begin(),traversedNodes.end(),root->leftChild.get()->id))){
+			root = root->leftChild.get();
+		}
+		else if(root->rightChild &&!(std::count(traversedNodes.begin(),traversedNodes.end(),root->rightChild.get()->id))){
+			root = root->rightChild.get();
+		}
+		else if(root->parent){
+			root = root->parent;
+		}
+		else{
+			break;
+		}
 	}
-
 	
 	// TODO 6.3a: Traverse the tree depth-first
 }
@@ -101,7 +117,7 @@ int main()
 {
 	const auto root1 = newTree({ 6, 2, 1, 4, 3, 5, 7, 9, 8 });
 	const auto root2 = newTree({ 5, 9, 7, 6, 2, 1, 4, 3, 8 });
-
+/*
 	std::cout << "TreeNode 1:" << std::endl;
 	std::cout << "Breadth-first: ";
 	breadthFirstTraversal(root1.get());
@@ -122,6 +138,9 @@ int main()
 
 	writeSVG(root1.get(), "tree1.svg");
 	writeSVG(root2.get(), "tree2.svg");
-
+*/
+	std::cout << "Depth-first:   ";
+	depthFirstTraversal(root1.get());
+	std::cout << std::endl << std::endl;
 	return 0;
 }
