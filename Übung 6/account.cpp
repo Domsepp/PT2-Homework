@@ -26,13 +26,15 @@ class Account {
 		m_balance += amount;
 		return true;
 	}
+
+	virtual ~Account(){}
 };
 
 class SavingAccount : public Account {
 	public:
 	SavingAccount(int accountNumber) : Account(accountNumber){}
 
-	~SavingAccount() { // Destruktor
+	virtual ~SavingAccount() { // Destruktor
 		std::cout << "Account " << m_accountNumber << ": Destroyed saving account (Balance: " << m_balance << ")\n";
 	}
 };
@@ -41,7 +43,7 @@ class YouthAccount : public Account {
 	public:
 	YouthAccount(int accountNumber) : Account(accountNumber){}
 
-	~YouthAccount() { // Destruktor
+	virtual ~YouthAccount() { // Destruktor
 		std::cout << "Account " << m_accountNumber << ": Destroyed youth account (Balance: " << m_balance << ")\n";
 	}
 
