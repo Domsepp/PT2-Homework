@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <memory>
 
 class Account {
 	protected:
@@ -61,7 +62,7 @@ class YouthAccount : public Account {
 
 int main() {
 	// TODO: Adjust this type to store all account types
-	std::vector<Account*> m_accounts;
+	std::vector<std::unique_ptr<Account>> m_accounts;
 
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -70,18 +71,18 @@ int main() {
 	int64_t init = initDepositDistrib(gen);
 	constexpr int accountCount = 5; // used to be 20
 	for (int i = 0; i < accountCount; ++i) {
-		//m_accounts.push_back(Account(i)); // TODO: Remove this line and create specific account instead
+		//m_accounts.emplace_back(Account(i)); // TODO: Remove this line and create specific account instead
 		if (youthAccountDistrib(gen)) {
 			// Create YouthAccount
 			//YouthAccount *temp = new YouthAccount(i);
-			//m_accounts.push_back(temp);
-			m_accounts.push_back(new YouthAccount(i));
+			//m_accounts.emplace_back(temp);
+			m_accounts.emplace_back(new YouthAccount(i));
 			m_accounts.back()->transaction(init, "Youth welcome gift");
 		} else {
 			// Create SavingAccount
 			//SavingAccount temp = SavingAccount(i);
-			//m_accounts.push_back(&temp);
-			m_accounts.push_back(new SavingAccount(i));
+			//m_accounts.emplace_back(&temp);
+			m_accounts.emplace_back(new SavingAccount(i));
 		}
 		m_accounts.back()->transaction(initDepositDistrib(gen), "Deposit");
 	}
@@ -89,7 +90,7 @@ int main() {
 	std::uniform_int_distribution<> transactionDistrib(-100, 100); //same here as in line 67
 	constexpr int simulationRuns = 1; // used to be 5
 	for (int i = 0; i < simulationRuns; ++i) {
-		for (auto *account : m_accounts) {
+		for (auto& account : m_accounts) {
 			account->transaction(transactionDistrib(gen), "Random transaction");
 		}
 	}
@@ -101,8 +102,8 @@ int main() {
 
 	// Jetzt ist Zerstörung angesagt // welp, doesn't call the destructor tho
 	std::cout << "m_accounts.size() = " << m_accounts.size() << std::endl;
-	for (Account* account : m_accounts) {
-		delete account;
+	for (auto& account : m_accounts) {
+		account.release();
 	}
 	std::cout << "m_accounts.size() = " << m_accounts.size() << std::endl;
 	
