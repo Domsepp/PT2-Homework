@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <memory>
 
 class Account {
 	protected:
@@ -81,7 +82,7 @@ int main() {
 	std::uniform_int_distribution<> transactionDistrib(-100, 100); //same here as in line 67
 	constexpr int simulationRuns = 5;
 	for (int i = 0; i < simulationRuns; ++i) {
-		for (auto *account : m_accounts) {
+		for (auto& account : m_accounts) {
 			account->transaction(transactionDistrib(gen), "Random transaction");
 		}
 	}
