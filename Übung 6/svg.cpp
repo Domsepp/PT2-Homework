@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <stack>
 
 struct TreeNode
 {
@@ -60,8 +61,13 @@ std::unique_ptr<TreeNode> newTree(const std::vector<int>& ids)
 void depthFirstTraversal(const TreeNode* root)
 {
 	std::vector<TreeNode*> traversedNodes;
+	std::stack<TreeNode*> treeStack;
 
-	for(TreeNode node : )
+	while(root != NULL){
+		root = root->leftChild.get();
+	}
+
+	
 	// TODO 6.3a: Traverse the tree depth-first
 }
 
