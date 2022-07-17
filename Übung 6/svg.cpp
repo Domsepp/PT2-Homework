@@ -64,11 +64,11 @@ void depthFirstTraversal(const TreeNode* root)
 	std::vector<int> traversedNodes;
 
 	while(true){
-		std::cout << "loopstart\n";
+		//std::cout << "loopstart\n";
 		if(!(std::count(traversedNodes.begin(),traversedNodes.end(),root->id))){
 			traversedNodes.push_back(root->id);
 			std::cout<<root->id<<" , ";
-			std::cout<<"added\n";
+			//std::cout<<"added\n";
 		}
 		if(root->leftChild &&!(std::count(traversedNodes.begin(),traversedNodes.end(),root->leftChild.get()->id))){
 			root = root->leftChild.get();
