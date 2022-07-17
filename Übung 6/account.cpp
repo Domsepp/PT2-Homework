@@ -102,9 +102,7 @@ int main() {
 
 	// Jetzt ist Zerstörung angesagt // welp, doesn't call the destructor tho
 	std::cout << "m_accounts.size() = " << m_accounts.size() << std::endl;
-	for (auto& account : m_accounts) {
-		account.release();
-	}
+	m_accounts.clear();
 	std::cout << "m_accounts.size() = " << m_accounts.size() << std::endl;
 	
 	return 0;
