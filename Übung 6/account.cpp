@@ -1,6 +1,5 @@
 #include <iostream>
 #include <random>
-#include <memory>
 
 class Account {
 	protected:
@@ -87,7 +86,7 @@ int main() {
 		}
 	}
 
-	for (Account* account : m_accounts) {
+	for (auto& account : m_accounts) {
 		delete account;
 	}
 	
