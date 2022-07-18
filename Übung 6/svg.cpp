@@ -6,6 +6,7 @@
 #include <stack>
 #include <algorithm>
 #include <queue>
+#include <cmath>
 
 struct TreeNode
 {
@@ -112,9 +113,43 @@ struct Point
 	int y;
 };
 
+int findDepth(const TreeNode* root){
+	std::vector<int> traversedNodes;
+	int curr_depth = 0;
+	int max_depth = 0;
+
+	while(true){
+		if(!(std::count(traversedNodes.begin(),traversedNodes.end(),root->id))){
+			traversedNodes.push_back(root->id);
+		}
+		if(root->leftChild &&!(std::count(traversedNodes.begin(),traversedNodes.end(),root->leftChild.get()->id))){
+			root = root->leftChild.get();
+			curr_depth++;
+		}
+		else if(root->rightChild &&!(std::count(traversedNodes.begin(),traversedNodes.end(),root->rightChild.get()->id))){
+			root = root->rightChild.get();
+			curr_depth++;
+		}
+		else if(root->parent){
+			root = root->parent;
+			curr_depth--;
+		}
+		else{
+			break;
+		}
+		if(curr_depth > max_depth) max_depth = curr_depth;
+	}
+	std::cout << max_depth << "\n";
+	return max_depth;
+}
+
 void writeSVGNode(std::ofstream& stream, int id, const Point& p)
 {
 	// TODO 6.3c: Draw a circle at (p.x, p.y) and write the ID of the node inside of it
+	int x, y;
+	x = p.x * 20;
+	y = p.y * 60 + 10;
+	stream << "<circle cx=\"" << x << "\" cy=\"" << y << "\" r=\"10\" style=\"fill:white;stroke:black;stroke-width:1\" />\n";
 }
 
 void writeSVGEdge(std::ofstream& stream, const Point& p1, const Point& p2)
@@ -125,6 +160,65 @@ void writeSVGEdge(std::ofstream& stream, const Point& p1, const Point& p2)
 void writeSVG(const TreeNode* root, const std::string& filename)
 {
 	// TODO 6.3a: Write a valid svg file with the given filename which shows the given tree
+	int depth = findDepth(root);
+	int radius = 10;
+	int pWidth = pow(2,depth) * 2 * (radius+5);
+	int pHeight = 6*radius * (depth+1);
+
+	std::ofstream svgFile;
+	svgFile.open(filename);
+	svgFile << "<svg version=\"1.0\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 "<< pWidth << " " << pHeight << "\" > \n";
+	svgFile << "<title>Binary-Tree</title> \n <defs> \n <style type=\"text/css\"> \n </style> \n </defs> \n";
+
+	// ---------- Tiefensuche ------------
+
+	std::vector<int> traversedNodes;
+	int curr_depth = 0;
+	int curr_width = pow(2,depth);
+	Point p;
+	while(true){
+		if(!(std::count(traversedNodes.begin(),traversedNodes.end(),root->id))){
+			traversedNodes.push_back(root->id);
+		}
+		if(root->leftChild &&!(std::count(traversedNodes.begin(),traversedNodes.end(),root->leftChild.get()->id))){
+			root = root->leftChild.get();
+			curr_depth++;
+			curr_width -= pow(2, (depth - curr_depth));
+			p.x = curr_width;
+			p.y = curr_depth;
+			writeSVGNode(svgFile, root->id, p);
+		}
+		else if(root->rightChild &&!(std::count(traversedNodes.begin(),traversedNodes.end(),root->rightChild.get()->id))){
+			root = root->rightChild.get();
+			curr_depth++;
+			curr_width += pow(2, (depth - curr_depth));
+			p.x = curr_width;
+			p.y = curr_depth;
+			writeSVGNode(svgFile, root->id, p);
+		}
+		else if(root->parent){
+			root = root->parent;
+			int lol = curr_width;
+			while (lol % 2 == 0)
+			{
+				lol /= 2;
+			}
+			if (lol % 4 == 1)
+			{
+				curr_width += pow(2, (depth - curr_depth));
+			} else {
+				curr_width -= pow(2, (depth - curr_depth));
+			}
+			curr_depth--;
+		}
+		else{
+			break;
+		}
+	}
+
+	// -----------------------------------
+
+	svgFile << "</svg>";
 }
 
 int main()
@@ -158,5 +252,7 @@ int main()
 	std::cout << "\nBreadth-first: ";
 	breadthFirstTraversal(root1.get());
 	std::cout << std::endl << std::endl;
+
+	writeSVG(root1.get(),"tree.svg");
 	return 0;
 }
