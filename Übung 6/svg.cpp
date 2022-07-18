@@ -69,7 +69,7 @@ void depthFirstTraversal(const TreeNode* root)
 		//std::cout << "loopstart\n";
 		if(!(std::count(traversedNodes.begin(),traversedNodes.end(),root->id))){
 			traversedNodes.push_back(root->id);
-			std::cout<<root->id<<" , ";
+			std::cout<<root->id<<", ";
 			//std::cout<<"added\n";
 		}
 		if(root->leftChild &&!(std::count(traversedNodes.begin(),traversedNodes.end(),root->leftChild.get()->id))){
@@ -82,6 +82,7 @@ void depthFirstTraversal(const TreeNode* root)
 			root = root->parent;
 		}
 		else{
+			std::cout << "\b\b ";
 			break;
 		}
 	}
@@ -101,10 +102,10 @@ void breadthFirstTraversal(const TreeNode* root)
 		if(nodeQueue.front()->rightChild.get()){
 			nodeQueue.push(nodeQueue.front()->rightChild.get());
 		}
-		std::cout<<nodeQueue.front()->id<<" , ";
+		std::cout<<nodeQueue.front()->id<<", ";
 		nodeQueue.pop();
 	}
-	std::cout << "\n";
+	std::cout << "\b\b ";
 }
 
 struct Point
@@ -139,7 +140,6 @@ int findDepth(const TreeNode* root){
 		}
 		if(curr_depth > max_depth) max_depth = curr_depth;
 	}
-	std::cout << max_depth << "\n";
 	return max_depth;
 }
 
@@ -151,7 +151,7 @@ void writeSVGNode(std::ofstream& stream, int id, const Point& p)
 	y = p.y * 60 + 15;
 	stream << "<circle cx=\"" << x << "\" cy=\"" << y << "\" r=\"10\" style=\"fill:white;stroke:black;stroke-width:1\" />\n";
 	int fontsize = 10;
-	stream << "<text x=\"" << x-(fontsize)/2 << "\" y=\"" << y+(fontsize)/2 << "\" style=\"font-family:Verdana;font-size=" << fontsize << ";fill:black\">" << id << "</text>\n";
+	stream << "<text x=\"" << x << "\" y=\"" << y+(fontsize)/2 << "\" style=\"text-anchor:middle;font-family:Verdana;font-size=" << fontsize << ";fill:black\">" << id<< "</text>\n";
 }
 
 void writeSVGEdge(std::ofstream& stream, const Point& p1, const Point& p2)
@@ -243,8 +243,7 @@ int main()
 {
 	const auto root1 = newTree({ 6, 2, 1, 4, 3, 5, 7, 9, 8 });
 	const auto root2 = newTree({ 5, 9, 7, 6, 2, 1, 4, 3, 8 });
-	const auto root3 = newTree({6,2,3,8,7,5,4,1,4,3,2,9,3,10,4,4,6,1,32,4,2,1,4,3,12,3,2,34,12,4,32,8,47,667});
-/*
+
 	std::cout << "TreeNode 1:" << std::endl;
 	std::cout << "Breadth-first: ";
 	breadthFirstTraversal(root1.get());
@@ -265,13 +264,6 @@ int main()
 
 	writeSVG(root1.get(), "tree1.svg");
 	writeSVG(root2.get(), "tree2.svg");
-*/
-	std::cout << "Depth-first:   ";
-	depthFirstTraversal(root3.get());
-	std::cout << "\nBreadth-first: ";
-	breadthFirstTraversal(root3.get());
-	std::cout << std::endl << std::endl;
 
-	writeSVG(root3.get(),"tree.svg");
 	return 0;
 }
