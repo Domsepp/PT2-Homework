@@ -5,6 +5,7 @@
 #include <vector>
 #include <stack>
 #include <algorithm>
+#include <queue>
 
 struct TreeNode
 {
@@ -90,6 +91,19 @@ void depthFirstTraversal(const TreeNode* root)
 void breadthFirstTraversal(const TreeNode* root)
 {
 	// TODO 6.3b: Traverse the tree breadth-first
+	std::queue<TreeNode*> nodeQueue;
+	nodeQueue.push(const_cast<TreeNode*>(root));
+	while(!nodeQueue.empty()){
+		if(nodeQueue.front()->leftChild.get()){
+			nodeQueue.push(nodeQueue.front()->leftChild.get());
+		}
+		if(nodeQueue.front()->rightChild.get()){
+			nodeQueue.push(nodeQueue.front()->rightChild.get());
+		}
+		std::cout<<nodeQueue.front()->id<<" , ";
+		nodeQueue.pop();
+	}
+	std::cout << "\n";
 }
 
 struct Point
@@ -141,6 +155,8 @@ int main()
 */
 	std::cout << "Depth-first:   ";
 	depthFirstTraversal(root1.get());
+	std::cout << "\nBreadth-first: ";
+	breadthFirstTraversal(root1.get());
 	std::cout << std::endl << std::endl;
 	return 0;
 }
