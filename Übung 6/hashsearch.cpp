@@ -7,8 +7,7 @@
 constexpr int64_t prime = 293; // Prime close to the magnitude of the alphabet
 constexpr int64_t hashTableMagnitude = 1000000009;
 
-int64_t nextHash(int64_t hash, int64_t primePow, char leavingChar, char enteringChar)
-{
+int64_t nextHash(int64_t hash, int64_t primePow, char leavingChar, char enteringChar) {
 	// TODO: Compute next rolling hash based on previous hash, primePow, the
 	//       character "leaving" the search window and the character
 	//       "entering" the search window.
@@ -16,13 +15,11 @@ int64_t nextHash(int64_t hash, int64_t primePow, char leavingChar, char entering
 	return 0;
 }
 
-std::vector<size_t> search(const std::string& pattern, const std::string& text)
-{
+std::vector<size_t> search(const std::string& pattern, const std::string& text) {
 	const size_t patternLength = pattern.length();
 	const size_t textLength = text.length();
 
-	if (textLength < patternLength)
-	{
+	if (textLength < patternLength) {
 		return {};
 	}
 
@@ -30,30 +27,47 @@ std::vector<size_t> search(const std::string& pattern, const std::string& text)
 	//       keep in mind to apply modulo after each operation.
 	//       Hint: you can't simply use std::pow because of that.
 	int64_t primePow = 1;
+	for (size_t i = 0; i < patternLength; i++) {
+		primePow = (primePow * prime) % hashTableMagnitude;
+	}
+	
 
 	// TODO: Compute patternHash, the hash value of the pattern and the first
 	//       substringHash.
-	int64_t patternHash = 0;
-	int64_t substringHash = 0;
+	int64_t patternHash = 1;
+	int64_t substringHash = 1;
+	std::vector<size_t> positions;
+	for (size_t i = 0; i < patternLength; i++) {
+		patternHash = ((patternHash * primePow) % prime + pattern[i]) % prime;
+		substringHash = ((substringHash * primePow) % prime + text[i]) % prime;
+	}
+	if (patternHash == substringHash) {
+		positions.push_back(0);
+	}
+	// std::cout << "patternHash = " << patternHash << ", substringHash = " << substringHash << std::endl;
 
+	for (size_t i = patternLength + 1; i < textLength; i++) {
+		substringHash = nextHash(substringHash, primePow, text[i-patternLength], text[i]);
+		if (patternHash == substringHash) {
+			positions.push_back(i-patternLength);
+		}
+		
+	}
+	
 	// TODO: Compare each individual substring's hash with patternHash and push
 	//       all found occurrences to the positions vector.
 	//       Compute the next substringHash if needed.
-	std::vector<size_t> positions;
+	// std::vector<size_t> positions;
 
 	return positions;
 }
 
-std::vector<std::string> loadTexts(const std::string& filepath)
-{
+std::vector<std::string> loadTexts(const std::string& filepath) {
 	std::ifstream file;
 	file.exceptions(std::ifstream::failbit);
-	try
-	{
+	try {
 		file.open(filepath);
-	}
-	catch (const std::ifstream::failure& e)
-	{
+	} catch (const std::ifstream::failure& e) {
 		std::cerr << R"(Could not open file (")" << filepath << R"("): )" << std::strerror(errno)
 				  << std::endl;
 		return {};
@@ -62,15 +76,13 @@ std::vector<std::string> loadTexts(const std::string& filepath)
 
 	std::string line;
 	std::vector<std::string> lines;
-	while (std::getline(file, line))
-	{
+	while (std::getline(file, line)) {
 		lines.push_back(line);
 	}
 	return lines;
 }
 
-int main()
-{
+int main() {
 	const auto texts = loadTexts("loremipsum.txt");
 	const std::string pattern = "ipsum";
 
@@ -78,11 +90,9 @@ int main()
 
 	std::cout << "Found at positions:\n";
 	size_t counter = 0;
-	for (size_t lineNumber = 0; lineNumber < texts.size(); ++lineNumber)
-	{
-		for (size_t linePos : search(pattern, texts[lineNumber]))
-		{
-			std::cout << "  " << lineNumber << ", " << linePos << '\n';
+	for (size_t lineNumber = 0; lineNumber < texts.size(); ++lineNumber) {
+		for (size_t linePos : search(pattern, texts[lineNumber])) {
+			std::cout << "  " << lineNumber << ", " << linePos << '\n'; // should better output linenumber+1
 			counter++;
 		}
 	}
