@@ -11,6 +11,7 @@ int64_t nextHash(int64_t hash, int64_t primePow, char leavingChar, char entering
 	// TODO: Compute next rolling hash based on previous hash, primePow, the
 	//       character "leaving" the search window and the character
 	//       "entering" the search window.
+	
 
 	return 0;
 }
@@ -37,6 +38,7 @@ std::vector<size_t> search(const std::string& pattern, const std::string& text) 
 	int64_t patternHash = 1;
 	int64_t substringHash = 1;
 	std::vector<size_t> positions;
+
 	for (size_t i = 0; i < patternLength; i++) {
 		patternHash = ((patternHash * primePow) % prime + pattern[i]) % prime;
 		substringHash = ((substringHash * primePow) % prime + text[i]) % prime;
@@ -44,7 +46,7 @@ std::vector<size_t> search(const std::string& pattern, const std::string& text) 
 	if (patternHash == substringHash) {
 		positions.push_back(0);
 	}
-	// std::cout << "patternHash = " << patternHash << ", substringHash = " << substringHash << std::endl;
+	std::cout << "patternHash = " << patternHash << ", substringHash = " << substringHash << std::endl;
 
 	for (size_t i = patternLength + 1; i < textLength; i++) {
 		substringHash = nextHash(substringHash, primePow, text[i-patternLength], text[i]);
@@ -58,6 +60,7 @@ std::vector<size_t> search(const std::string& pattern, const std::string& text) 
 	//       all found occurrences to the positions vector.
 	//       Compute the next substringHash if needed.
 	// std::vector<size_t> positions;
+
 
 	return positions;
 }
