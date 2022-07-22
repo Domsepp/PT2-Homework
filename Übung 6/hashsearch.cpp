@@ -11,8 +11,10 @@ int64_t nextHash(int64_t hash, int64_t primePow, char leavingChar, char entering
 	// TODO: Compute next rolling hash based on previous hash, primePow, the
 	//       character "leaving" the search window and the character
 	//       "entering" the search window.
-	hash = (prime *(hash - leavingChar*primePow)+enteringChar)%prime;
-	if(hash<0) hash = (hash+prime);
+	// std::cout << "hash = " << hash /*<< ", primePow = " << primePow << ", leavingChar = " << (int)leavingChar << ", enteringChar = " << (int)enteringChar*/;
+	hash = (((hash - (leavingChar * primePow) % hashTableMagnitude) * prime) % hashTableMagnitude + enteringChar) % hashTableMagnitude;
+	if(hash<0) hash += hashTableMagnitude;
+	// std::cout << ", leavinghash = " << hash << std::endl;
 
 	return hash;
 }
@@ -32,40 +34,46 @@ std::vector<size_t> search(const std::string& pattern, const std::string& text) 
 	//       keep in mind to apply modulo after each operation.
 	//       Hint: you can't simply use std::pow because of that.
 	int64_t primePow = 1;
-	for (size_t i = 0; i < patternLength; i++) {
+	for (size_t i = 1; i < patternLength; i++) {
 		primePow = (primePow * prime) % hashTableMagnitude;
 	}
 	
 
 	// TODO: Compute patternHash, the hash value of the pattern and the first
 	//       substringHash.
-	int64_t patternHash = 1;
-	int64_t substringHash = 1;
 	std::vector<size_t> positions;
 
-	for (size_t i = 0; i < patternLength; i++) {
-		patternHash = ((patternHash * primePow) % prime + pattern[i]) % prime;
-		substringHash = ((substringHash * primePow) % prime + text[i]) % prime;
+	int64_t patternHash = pattern[0];
+	int64_t substringHash = text[0];
+	for (size_t i = 1; i < patternLength; i++) {
+		patternHash = ((patternHash * prime) + pattern[i]) % hashTableMagnitude;
+		substringHash = ((substringHash * prime) + text[i]) % hashTableMagnitude;
 	}
-	if (patternHash == substringHash) {
+	/*if (patternHash == substringHash) {
 		positions.push_back(0);
-	}
-	std::cout << "patternHash = " << patternHash << ", substringHash = " << substringHash << std::endl;
+	}*/
+	//std::cout << "patternHash = " << patternHash << ", substringHash = " << substringHash << std::endl;
 
-	for(i = 0; i<=textLength-patternLength;i++){
+	for(i = 0; i <= textLength - patternLength; i++){
 		if(patternHash == substringHash){
-			for(j; j < patternLength; j++){
-				if(text[i+j]!= pattern[j]){
+			//std::cout << "hashes are the same" << std::endl;
+			for(j = 0; j < patternLength; j++){
+				if(text[i+j] != pattern[j]){
 					break;
 				}
 			}
-			if(j==patternLength){
+			if(j == patternLength){
 				std::cout << "Pattern found at: " << i << std::endl;
 			}
 		}
-		if(i<textLength-patternLength){
-			substringHash = nextHash(substringHash, primePow, text[i-patternLength], text[i]);
-			std::cout << substringHash;
+		if(i < textLength - patternLength){
+			substringHash = nextHash(substringHash, primePow, text[i], text[i + patternLength]);
+			if (patternHash == substringHash) {
+				//std::cout << "patternHash = " << patternHash << ", substringHash = " << substringHash << std::endl;
+				positions.push_back(i);
+			}
+			
+			//std::cout << substringHash << std::endl;
 		}
 	}
 	
