@@ -23,12 +23,6 @@ class Fraction{
 
 	friend std::ostream& operator<< (std::ostream& os,Fraction frac);
 
-	//dürfen wir eigentlich nicht, aber ja...:
-	friend Fraction operator+ (Fraction frac1,Fraction frac2);
-	friend Fraction operator- (Fraction frac1,Fraction frac2);
-	friend Fraction operator* (Fraction frac1,Fraction frac2);
-	friend Fraction operator/ (Fraction frac1,Fraction frac2);
-
 	void reduce(Fraction& frac){
 		if (frac.n_ == 0) {
 			throw std::invalid_argument("Nenner eines Bruchs darf nicht 0 sein.");
@@ -62,8 +56,36 @@ class Fraction{
 		frac.z_ /= large;
 		if (neg) frac.z_ *= -1;
 	}
-};
+	Fraction add(Fraction frac2){
+		Fraction result = Fraction(this->z_*frac2.n_+this->n_*frac2.z_,this->n_*frac2.n_);
+		result.reduce(result);
+		return result;
+	}
+	Fraction subtract(Fraction frac2){
+		Fraction result = Fraction(this->z_*frac2.n_-this->n_*frac2.z_,this->n_*frac2.n_);
+		result.reduce(result);
+		return result;
+	}
+	Fraction multiply(Fraction frac2){
+		Fraction result = Fraction(this->z_*frac2.z_,this->n_*frac2.n_);
+		result.reduce(result);
+		return result;
+	}
+	Fraction divide(Fraction frac2){
+		assert(frac2.z_!=0);
+		Fraction result = Fraction(this->z_*frac2.n_,this->n_*frac2.z_);
+		result.reduce(result);
+		return result;
+	}
 
+	operator double() const{
+		double z = static_cast<double>(z_);
+		double n = static_cast<double>(n_);
+
+		return z/n;
+	}
+
+};
 
 std::ostream& operator<<(std::ostream& os,Fraction frac){
 	frac.reduce(frac);
@@ -84,62 +106,21 @@ std::ostream& operator<<(std::ostream& os,Fraction frac){
 	return os;
 }
 
-Fraction operator+(Fraction frac1, Fraction frac2){
-	Fraction result = Fraction(frac1.z_*frac2.n_+frac1.n_*frac2.z_,frac1.n_*frac2.n_);
-	result.reduce(result);
-	return result;
-}
+Fraction operator+(Fraction frac1, Fraction frac2){ return frac1.add(frac2);}
+Fraction operator+(int i, Fraction frac){return Fraction(i).add(frac);}
+Fraction operator+(Fraction frac, int i){return Fraction(i).add(frac);}
 
-Fraction operator-(Fraction frac1, Fraction frac2){
-	Fraction result = Fraction(frac1.z_*frac2.n_-frac1.n_*frac2.z_,frac1.n_*frac2.n_);
-	result.reduce(result);
-	return result;
-}
+Fraction operator-(Fraction frac1, Fraction frac2){ return frac1.subtract(frac2);}
+Fraction operator-(Fraction frac, int i){return frac.subtract(Fraction(i));}
+Fraction operator-(int i, Fraction frac){return Fraction(i).subtract(frac);}
 
-Fraction operator*(Fraction frac1, Fraction frac2){
-	Fraction result = Fraction(frac1.z_*frac2.z_,frac1.n_*frac2.n_);
-	result.reduce(result);
-	return result;
-}
+Fraction operator*(Fraction frac1, Fraction frac2){ return frac1.multiply(frac2);}
+Fraction operator*(int i, Fraction frac){return Fraction(i).multiply(frac);}
+Fraction operator*(Fraction frac, int i){return Fraction(i).multiply(frac);}
 
-Fraction operator/(Fraction frac1, Fraction frac2){
-	assert(frac2.z_!=0);
-	Fraction result = Fraction(frac1.z_*frac2.n_,frac1.n_*frac2.z_);
-	result.reduce(result);
-	return result;
-}
-
-Fraction operator+(int i, Fraction frac){
-	return Fraction(i) + frac;
-}
-
-Fraction operator+(Fraction frac, int i){
-	return Fraction(i) + frac;
-}
-
-Fraction operator-(Fraction frac, int i){
-	return frac - Fraction(i);
-}
-
-Fraction operator-(int i, Fraction frac){
-	return Fraction(i) - frac;
-}
-
-Fraction operator*(int i, Fraction frac){
-	return Fraction(i) * frac;
-}
-
-Fraction operator*(Fraction frac, int i){
-	return Fraction(i) * frac;
-}
-
-Fraction operator/(Fraction frac, int i){
-	return frac / Fraction(i);
-}
-
-Fraction operator/(int i, Fraction frac){
-	return Fraction(i) / frac;
-}
+Fraction operator/(Fraction frac1, Fraction frac2){ return frac1.divide(frac2);}
+Fraction operator/(Fraction frac, int i){return frac.divide(Fraction(i));}
+Fraction operator/(int i, Fraction frac){return Fraction(i).divide(frac);}
 
 void runTests()
 {
@@ -178,17 +159,13 @@ void runTests()
 	std::cout << -3 * fraction_1_3 << '\n'; // Should print "-1"
 	std::cout << -3 / fraction_1_3 << '\n'; // Should print "-9"
 
-	/*So funktioniert es, aber die Test constexpr drunter wird nicht erkannt (die folgenden zwei Zeilen hab ich selbst eingefügt)*/
-	// Fraction constexprFractest = -1 * ((Fraction(4, 5) / 2 + Fraction(2, 4) * (Fraction(3, 9) - 1)) * 3 + 4 - Fraction(1, 5)) / Fraction(7, 2);
-	// std::cout << constexprFractest << "\n"; // Should print "-1 1/7"
-
 	/* Test constexpr (ZA2)*/
 	//constexpr Fraction constexprFrac = -1 * ((Fraction(4, 5) / 2 + Fraction(2, 4) * (Fraction(3, 9) - 1)) * 3 + 4 - Fraction(1, 5)) / Fraction(7, 2);
 	//std::cout << constexprFrac << '\n'; // Should print "-1 1/7"
 
 	/* Test User - defined conversion function (ZA1)*/
-	// double castedValue = static_cast<double>(Fraction(3, 4));
-	// std::cout << castedValue << '\n'; // Should print 0.75
+	double castedValue = static_cast<double>(Fraction(3, 4));
+	std::cout << castedValue << '\n'; // Should print 0.75
 }
 
 int main()
